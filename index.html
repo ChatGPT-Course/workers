@@ -6,7 +6,7 @@
     <title>BG GROUP IT - AI решения для бизнеса</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
+            --primary-color: #34495e; /* Сделал чуть светлее */
             --secondary-color: #3498db;
             --accent-color: #e74c3c;
             --light-color: #ecf0f1;
@@ -63,40 +63,86 @@
             color: var(--secondary-color);
         }
         
-        /* Mobile menu button */
+        /* Mobile menu button - обновленный стиль */
         .menu-btn {
             display: none;
-            background: none;
+            background: var(--secondary-color);
             border: none;
             color: var(--text-light);
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
             font-size: 1.5rem;
             cursor: pointer;
-        }
-        
-        /* Navigation */
-        nav {
-            display: flex;
+            justify-content: center;
             align-items: center;
+            margin-left: auto; /* Сдвигаем вправо */
         }
         
-        .nav-links {
+        /* Навигация по сайту - новая карточка */
+        .site-navigation {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+        
+        .site-navigation h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .nav-buttons {
             display: flex;
-            list-style: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
-        
-        .nav-links a {
-            color: var(--text-light);
+        .nav-buttons a {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
         }
         
-        .nav-links a:hover {
-            color: var(--secondary-color);
+        .nav-buttons a:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        /* Кнопка "Наверх" */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
         }
         
         .cta-button {
@@ -155,16 +201,26 @@
             border-radius: 8px;
             padding: 2rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
         }
         
         .feature-card h3 {
             color: var(--secondary-color);
             margin-bottom: 1rem;
+        }
+        
+        /* Решение проблем - новый стиль */
+        .solution-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .solution-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
         }
         
         /* Products section */
@@ -259,28 +315,11 @@
         /* Mobile styles */
         @media (max-width: 768px) {
             .menu-btn {
-                display: block;
+                display: flex;
             }
             
             .nav-links {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background-color: var(--primary-color);
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem 0;
-                transition: left 0.3s;
-            }
-            
-            .nav-links.active {
-                left: 0;
-            }
-            
-            .nav-links li {
-                margin: 1rem 0;
+                display: none;
             }
             
             .hero h1 {
@@ -289,6 +328,11 @@
             
             .hero p {
                 font-size: 1rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -301,10 +345,6 @@
             <button class="menu-btn" id="menuBtn">☰</button>
             <nav>
                 <ul class="nav-links" id="navLinks">
-                    <li><a href="#about">О компании</a></li>
-                    <li><a href="#products">Продукты</a></li>
-                    <li><a href="#solutions">Решения</a></li>
-                    <li><a href="#contacts">Контакты</a></li>
                     <li><a href="#" class="cta-button">Telegram бот</a></li>
                 </ul>
             </nav>
@@ -316,12 +356,46 @@
         <div class="container">
             <h1>AI-решения для вашего бизнеса</h1>
             <p>BG GROUP IT создает и продает продукты на базе искусственного интеллекта, которые помогают малому бизнесу автоматизировать процессы, сократить расходы и увеличить доход.</p>
-            <a href="#products" class="cta-button">Наши продукты</a>
         </div>
     </section>
 
+    <!-- Site navigation -->
+    <div class="container">
+        <div class="site-navigation">
+            <h3>Навигация по сайту</h3>
+            <div class="nav-buttons">
+                <a href="#about">О компании</a>
+                <a href="#mission">Наша миссия</a>
+                <a href="#products">Продукты</a>
+                <a href="#solutions">Решения</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+        </div>
+    </div>
+
     <!-- About section -->
     <section class="features" id="about">
+        <div class="container">
+            <h2 class="section-title">О компании</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>BG GROUP IT</h3>
+                    <p>Компания, которая массово создаёт и продаёт решения на базе ИИ. Мы не просто автоматизируем — мы помогаем зарабатывать на готовых продуктах, ботах, сервисах и инструментах.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Наш подход</h3>
+                    <p>Мы тестируем идеи, быстро запускаем MVP, упаковываем в лендинги и ботов, продаём через рекламу. Главная сила — в системном подходе и быстром выводе продуктов на рынок.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Наша цель</h3>
+                    <p>Сформировать бренд №1 по ИИ-решениям в Telegram и товарке. Выйти на стабильные 250 000 ₽ в день оборота, создать команду из 10+ человек, автоматизировать до 80% процессов.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission section -->
+    <section class="features" id="mission">
         <div class="container">
             <h2 class="section-title">Наша миссия</h2>
             <div class="features-grid">
@@ -390,19 +464,25 @@
     <section class="features" id="solutions">
         <div class="container">
             <h2 class="section-title">Как мы решаем проблемы клиентов</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>Масштабирование бизнеса</h3>
-                    <p>Наши франшизы предоставляют готовые бизнес-модели для быстрого старта и масштабирования.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Автоматизация процессов</h3>
-                    <p>Telegram-боты и AI-инструменты автоматизируют рутинные задачи, экономя ваше время.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Обучение и поддержка</h3>
-                    <p>Курсы и 24/7 поддержка помогают клиентам быстро освоить новые инструменты.</p>
-                </div>
+            
+            <div class="solution-card">
+                <h3>Проблема: Не знают, как масштабироваться</h3>
+                <p><strong>Наше решение:</strong> Готовые франшизы с проверенными бизнес-моделями. Вы получаете не просто продукт, а полноценную систему для заработка с поддержкой на каждом этапе.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h3>Проблема: Хотят дополнительный доход</h3>
+                <p><strong>Наше решение:</strong> Telegram-боты и автоматизированные системы, которые работают на вас 24/7. Пассивный доход без постоянного контроля.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h3>Проблема: Нет системы в бизнесе</h3>
+                <p><strong>Наше решение:</strong> Готовые инструменты автоматизации, которые структурируют процессы. От обработки заказов до CRM — всё в одном месте.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h3>Проблема: Запутались в технологиях ИИ</h3>
+                <p><strong>Наше решение:</strong> Простые и понятные интерфейсы. Мы делаем сложные технологии доступными без необходимости в технических знаниях.</p>
             </div>
         </div>
     </section>
@@ -439,38 +519,32 @@
         </div>
     </footer>
 
+    <!-- Кнопка "Наверх" -->
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
+
     <script>
-        // Mobile menu toggle
+        // Кнопка "Наверх"
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Mobile menu toggle (оставлен, но без функционала)
         const menuBtn = document.getElementById('menuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
         menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-        
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 70,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+            // Пока ничего не делаем, кнопка остается для будущего функционала
         });
     </script>
 </body>
