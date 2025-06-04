@@ -6,13 +6,14 @@
     <title>BG GROUP IT - AI решения для бизнеса</title>
     <style>
         :root {
-            --primary-color: #34495e; /* Сделал чуть светлее */
+            --primary-color: #34495e;
             --secondary-color: #3498db;
             --accent-color: #e74c3c;
             --light-color: #ecf0f1;
             --dark-color: #2c3e50;
             --text-color: #333;
             --text-light: #fff;
+            --current-nav-color: #3498db;
         }
         
         * {
@@ -63,86 +64,68 @@
             color: var(--secondary-color);
         }
         
-        /* Mobile menu button - обновленный стиль */
-        .menu-btn {
-            display: none;
+        /* Search button */
+        .search-btn {
             background: var(--secondary-color);
             border: none;
             color: var(--text-light);
             width: 40px;
             height: 40px;
             border-radius: 5px;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            justify-content: center;
-            align-items: center;
-            margin-left: auto; /* Сдвигаем вправо */
-        }
-        
-        /* Навигация по сайту - новая карточка */
-        .site-navigation {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin: 2rem auto;
-            max-width: 800px;
-        }
-        
-        .site-navigation h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        
-        .nav-buttons {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            align-items: center;
+            margin-left: auto;
+            position: relative;
         }
         
-        .nav-buttons a {
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .nav-buttons a:hover {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        /* Кнопка "Наверх" */
-        .scroll-to-top {
+        /* Navigation buttons - появляются при клике на лупу */
+        .nav-buttons-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: var(--accent-color);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            bottom: 20px;
+            right: 20px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            cursor: pointer;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s;
-            z-index: 99;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            border: none;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
         }
         
-        .scroll-to-top.visible {
+        .nav-buttons-container.visible {
             opacity: 1;
             visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .nav-button {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .nav-button.current {
+            background-color: var(--current-nav-color);
+            color: white;
+        }
+        
+        .nav-buttons-container.visible .nav-button {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: calc(var(--i) * 0.1s);
         }
         
         .cta-button {
@@ -188,27 +171,50 @@
             margin-bottom: 3rem;
             font-size: 2rem;
             color: var(--primary-color);
+            position: relative;
         }
         
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
+        /* Сноски для карточек */
         .feature-card {
             background-color: white;
             border-radius: 8px;
             padding: 2rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: attr(data-title);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform-origin: 0 0;
+        }
+        
+        /* Для карточек "О компании" - диагональные сноски */
+        #about .feature-card::before {
+            transform: translateY(-5px) rotate(-45deg);
+        }
+        
+        /* Для карточек "Наша миссия" - ровные сноски */
+        #mission .feature-card::before {
+            transform: none;
+            border-bottom-right-radius: 5px;
         }
         
         .feature-card h3 {
             color: var(--secondary-color);
             margin-bottom: 1rem;
+            margin-top: 1.5rem;
         }
         
-        /* Решение проблем - новый стиль */
+        /* Решение проблем - стиль с цветной полосой */
         .solution-card {
             background-color: white;
             border-radius: 8px;
@@ -216,11 +222,27 @@
             margin-bottom: 1.5rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border-left: 4px solid var(--accent-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-card::before {
+            content: "Решение";
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-bottom-right-radius: 5px;
         }
         
         .solution-card h3 {
             color: var(--primary-color);
             margin-bottom: 0.5rem;
+            margin-top: 1.8rem;
         }
         
         /* Products section */
@@ -314,14 +336,6 @@
         
         /* Mobile styles */
         @media (max-width: 768px) {
-            .menu-btn {
-                display: flex;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
             .hero h1 {
                 font-size: 2rem;
             }
@@ -330,9 +344,14 @@
                 font-size: 1rem;
             }
             
-            .nav-buttons {
-                flex-direction: column;
-                align-items: center;
+            .nav-buttons-container {
+                right: 10px;
+                bottom: 10px;
+            }
+            
+            .nav-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -342,14 +361,18 @@
     <header>
         <div class="container header-container">
             <a href="#" class="logo">BG <span>GROUP IT</span></a>
-            <button class="menu-btn" id="menuBtn">☰</button>
-            <nav>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#" class="cta-button">Telegram бот</a></li>
-                </ul>
-            </nav>
+            <button class="search-btn" id="searchBtn">🔍</button>
         </div>
     </header>
+
+    <!-- Navigation buttons - появляются при клике на лупу -->
+    <div class="nav-buttons-container" id="navButtons">
+        <button class="nav-button" data-section="about">О компании</button>
+        <button class="nav-button" data-section="mission">Наша миссия</button>
+        <button class="nav-button" data-section="products">Продукты</button>
+        <button class="nav-button" data-section="solutions">Решения</button>
+        <button class="nav-button" data-section="contacts">Контакты</button>
+    </div>
 
     <!-- Hero section -->
     <section class="hero">
@@ -359,34 +382,20 @@
         </div>
     </section>
 
-    <!-- Site navigation -->
-    <div class="container">
-        <div class="site-navigation">
-            <h3>Навигация по сайту</h3>
-            <div class="nav-buttons">
-                <a href="#about">О компании</a>
-                <a href="#mission">Наша миссия</a>
-                <a href="#products">Продукты</a>
-                <a href="#solutions">Решения</a>
-                <a href="#contacts">Контакты</a>
-            </div>
-        </div>
-    </div>
-
     <!-- About section -->
     <section class="features" id="about">
         <div class="container">
             <h2 class="section-title">О компании</h2>
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" data-title="BG GROUP IT">
                     <h3>BG GROUP IT</h3>
                     <p>Компания, которая массово создаёт и продаёт решения на базе ИИ. Мы не просто автоматизируем — мы помогаем зарабатывать на готовых продуктах, ботах, сервисах и инструментах.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-title="Наш подход">
                     <h3>Наш подход</h3>
                     <p>Мы тестируем идеи, быстро запускаем MVP, упаковываем в лендинги и ботов, продаём через рекламу. Главная сила — в системном подходе и быстром выводе продуктов на рынок.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-title="Наша цель">
                     <h3>Наша цель</h3>
                     <p>Сформировать бренд №1 по ИИ-решениям в Telegram и товарке. Выйти на стабильные 250 000 ₽ в день оборота, создать команду из 10+ человек, автоматизировать до 80% процессов.</p>
                 </div>
@@ -399,15 +408,15 @@
         <div class="container">
             <h2 class="section-title">Наша миссия</h2>
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" data-title="Создаем">
                     <h3>Создаем AI-продукты</h3>
                     <p>Мы находим проблемы малого бизнеса и превращаем их в понятные решения на базе искусственного интеллекта.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-title="Запускаем">
                     <h3>Быстрый запуск</h3>
                     <p>Тестируем идеи, быстро запускаем MVP, упаковываем в лендинги и ботов, продаем через рекламу.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-title="Гарантируем">
                     <h3>Гарантированный результат</h3>
                     <p>Мы создаём продукты, которые дают результат — и зарабатываем на этом вместе с клиентами.</p>
                 </div>
@@ -426,7 +435,7 @@
                         <h3>Франшиза Айрум</h3>
                         <p>Готовый бизнес на базе Telegram-ботов с полной поддержкой.</p>
                         <div class="product-price">от 18 900 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <button class="cta-button product-detail" data-product="Франшиза Айрум" data-price="18900">Подробнее</button>
                     </div>
                 </div>
                 <div class="product-card">
@@ -435,7 +444,7 @@
                         <h3>Готовые Telegram-боты</h3>
                         <p>Боты под ключ для автоматизации бизнес-процессов.</p>
                         <div class="product-price">от 8 000 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <button class="cta-button product-detail" data-product="Готовые Telegram-боты" data-price="8000">Подробнее</button>
                     </div>
                 </div>
                 <div class="product-card">
@@ -444,7 +453,7 @@
                         <h3>Обучающие курсы</h3>
                         <p>Курсы по созданию ботов, дизайну и бизнесу в digital.</p>
                         <div class="product-price">от 15 000 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <button class="cta-button product-detail" data-product="Обучающие курсы" data-price="15000">Подробнее</button>
                     </div>
                 </div>
                 <div class="product-card">
@@ -453,7 +462,7 @@
                         <h3>Индивидуальные решения</h3>
                         <p>Разработка AI-решений под конкретные задачи вашего бизнеса.</p>
                         <div class="product-price">от 19 000 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <button class="cta-button product-detail" data-product="Индивидуальные решения" data-price="19000">Подробнее</button>
                     </div>
                 </div>
             </div>
@@ -498,10 +507,10 @@
                 <div class="footer-column">
                     <h3>Продукты</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Франшизы</a></li>
-                        <li><a href="#">Telegram-боты</a></li>
-                        <li><a href="#">Обучающие курсы</a></li>
-                        <li><a href="#">Индивидуальные решения</a></li>
+                        <li><a href="#products">Франшизы</a></li>
+                        <li><a href="#products">Telegram-боты</a></li>
+                        <li><a href="#products">Обучающие курсы</a></li>
+                        <li><a href="#products">Индивидуальные решения</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -519,33 +528,96 @@
         </div>
     </footer>
 
-    <!-- Кнопка "Наверх" -->
-    <button class="scroll-to-top" id="scrollToTop">↑</button>
-
     <script>
-        // Кнопка "Наверх"
-        const scrollToTopBtn = document.getElementById('scrollToTop');
+        // Навигационные кнопки
+        const searchBtn = document.getElementById('searchBtn');
+        const navButtons = document.getElementById('navButtons');
+        const navButtonsList = document.querySelectorAll('.nav-button');
         
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollToTopBtn.classList.add('visible');
-            } else {
-                scrollToTopBtn.classList.remove('visible');
-            }
+        // Показываем/скрываем навигационные кнопки при клике на лупу
+        searchBtn.addEventListener('click', () => {
+            navButtons.classList.toggle('visible');
         });
         
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        // Прокрутка к секции при клике на навигационную кнопку
+        navButtonsList.forEach(button => {
+            button.addEventListener('click', () => {
+                const sectionId = button.getAttribute('data-section');
+                const section = document.getElementById(sectionId);
+                
+                if (section) {
+                    window.scrollTo({
+                        top: section.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Убираем выделение со всех кнопок
+                    navButtonsList.forEach(btn => btn.classList.remove('current'));
+                    // Выделяем текущую кнопку
+                    button.classList.add('current');
+                    
+                    // Скрываем меню через 1 секунду
+                    setTimeout(() => {
+                        navButtons.classList.remove('visible');
+                    }, 1000);
+                }
+            });
+            
+            // Добавляем индекс для анимации
+            button.style.setProperty('--i', button.dataset.index);
+        });
+        
+        // Выделяем текущий раздел при прокрутке
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            navButtonsList.forEach(button => {
+                const sectionId = button.getAttribute('data-section');
+                const section = document.getElementById(sectionId);
+                
+                if (section) {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        navButtonsList.forEach(btn => btn.classList.remove('current'));
+                        button.classList.add('current');
+                    }
+                }
             });
         });
         
-        // Mobile menu toggle (оставлен, но без функционала)
-        const menuBtn = document.getElementById('menuBtn');
-        menuBtn.addEventListener('click', () => {
-            // Пока ничего не делаем, кнопка остается для будущего функционала
+        // Обработка кнопок "Подробнее" для Telegram Mini App
+        document.querySelectorAll('.product-detail').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.getAttribute('data-product');
+                const productPrice = this.getAttribute('data-price');
+                
+                // Формируем сообщение для бота
+                const message = `🔹 <b>${productName}</b>\n` +
+                                `💰 Цена: <b>${productPrice} ₽</b>\n\n` +
+                                `📌 <a href="https://t.me/bg_group_manager">Связаться с менеджером</a>`;
+                
+                // Проверяем, открыто ли в Telegram Mini App
+                if (window.Telegram && window.Telegram.WebApp) {
+                    // Закрываем мини-апп и отправляем сообщение
+                    window.Telegram.WebApp.sendData(JSON.stringify({
+                        product: productName,
+                        price: productPrice,
+                        message: message
+                    }));
+                    window.Telegram.WebApp.close();
+                } else {
+                    // Для тестирования вне Telegram
+                    alert(`Информация о продукте:\n${message}`);
+                }
+            });
         });
+        
+        // Инициализация - выделяем первую кнопку
+        if (navButtonsList.length > 0) {
+            navButtonsList[0].classList.add('current');
+        }
     </script>
 </body>
 </html>
