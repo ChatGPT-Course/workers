@@ -57,20 +57,28 @@
             font-weight: bold;
             color: var(--text-light);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .logo span {
             color: var(--secondary-color);
         }
         
-        /* Mobile menu button */
+        /* Mobile menu button - UPDATED */
         .menu-btn {
             display: none;
-            background: none;
+            background: var(--secondary-color);
             border: none;
             color: var(--text-light);
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
             font-size: 1.5rem;
             cursor: pointer;
+            justify-content: center;
+            align-items: center;
         }
         
         /* Navigation */
@@ -93,6 +101,9 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .nav-links a:hover {
@@ -106,11 +117,22 @@
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .cta-button:hover {
             background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        /* Emoji styles */
+        .emoji-badge {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: inline-block;
         }
         
         /* Hero section */
@@ -119,17 +141,39 @@
             color: var(--text-light);
             padding: 4rem 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "🤖 🚀 💡 🧠 ⚡";
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
         }
         
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            position: relative;
         }
         
         .hero p {
             font-size: 1.2rem;
             max-width: 800px;
             margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            position: relative;
         }
         
         /* Features section */
@@ -142,6 +186,14 @@
             margin-bottom: 3rem;
             font-size: 2rem;
             color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .section-title .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
         
         .features-grid {
@@ -155,16 +207,74 @@
             border-radius: 8px;
             padding: 2rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            border-top: 4px solid var(--secondary-color);
         }
         
         .feature-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
         
         .feature-card h3 {
             color: var(--secondary-color);
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Mission section - UPDATED */
+        .mission {
+            background-color: var(--light-color);
+            padding: 4rem 0;
+        }
+        
+        .mission-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-content::before {
+            content: "✨";
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            top: -30px;
+            right: -30px;
+        }
+        
+        .mission-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .mission-points {
+            margin-top: 2rem;
+        }
+        
+        .mission-point {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+        
+        .mission-point-emoji {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 3px;
         }
         
         /* Products section */
@@ -184,31 +294,97 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
         .product-image {
             height: 200px;
-            background-color: var(--secondary-color);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2rem;
+            font-size: 3rem;
         }
         
         .product-info {
             padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-info h3 {
             margin-bottom: 0.5rem;
             color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .product-price {
             font-weight: bold;
             color: var(--accent-color);
             margin: 1rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .product-description {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        /* Solutions section */
+        .solutions {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .solution-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .solution-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* Stats section */
+        .stats {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
         }
         
         /* Footer */
@@ -228,6 +404,9 @@
         .footer-column h3 {
             margin-bottom: 1.5rem;
             font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .footer-links {
@@ -236,6 +415,9 @@
         
         .footer-links li {
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .footer-links a {
@@ -259,7 +441,7 @@
         /* Mobile styles */
         @media (max-width: 768px) {
             .menu-btn {
-                display: block;
+                display: flex;
             }
             
             .nav-links {
@@ -290,6 +472,11 @@
             .hero p {
                 font-size: 1rem;
             }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -297,15 +484,15 @@
     <!-- Header with navigation -->
     <header>
         <div class="container header-container">
-            <a href="#" class="logo">BG <span>GROUP IT</span></a>
+            <a href="#" class="logo">🤖 BG <span>GROUP IT</span></a>
             <button class="menu-btn" id="menuBtn">☰</button>
             <nav>
                 <ul class="nav-links" id="navLinks">
-                    <li><a href="#about">О компании</a></li>
-                    <li><a href="#products">Продукты</a></li>
-                    <li><a href="#solutions">Решения</a></li>
-                    <li><a href="#contacts">Контакты</a></li>
-                    <li><a href="#" class="cta-button">Telegram бот</a></li>
+                    <li><a href="#about">📌 О компании</a></li>
+                    <li><a href="#products">🛍️ Продукты</a></li>
+                    <li><a href="#solutions">💡 Решения</a></li>
+                    <li><a href="#contacts">📞 Контакты</a></li>
+                    <li><a href="#" class="cta-button">🤖 Telegram бот</a></li>
                 </ul>
             </nav>
         </div>
@@ -316,26 +503,76 @@
         <div class="container">
             <h1>AI-решения для вашего бизнеса</h1>
             <p>BG GROUP IT создает и продает продукты на базе искусственного интеллекта, которые помогают малому бизнесу автоматизировать процессы, сократить расходы и увеличить доход.</p>
-            <a href="#products" class="cta-button">Наши продукты</a>
+            <div class="hero-buttons">
+                <a href="#products" class="cta-button">🚀 Наши продукты</a>
+                <a href="#mission" class="cta-button" style="background-color: var(--secondary-color);">✨ Наша миссия</a>
+            </div>
         </div>
     </section>
 
-    <!-- About section -->
-    <section class="features" id="about">
+    <!-- Mission section - UPDATED -->
+    <section class="mission" id="mission">
         <div class="container">
-            <h2 class="section-title">Наша миссия</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>Создаем AI-продукты</h3>
-                    <p>Мы находим проблемы малого бизнеса и превращаем их в понятные решения на базе искусственного интеллекта.</p>
+            <div class="mission-content">
+                <h2><span class="emoji">🌟</span> Наша миссия</h2>
+                <p>BG GROUP IT — это команда экспертов, которая превращает сложные технологические решения в простые и доступные инструменты для вашего бизнеса. Мы не просто разрабатываем продукты — мы создаём возможности для роста и масштабирования.</p>
+                
+                <div class="mission-points">
+                    <div class="mission-point">
+                        <div class="mission-point-emoji">💎</div>
+                        <div>
+                            <h3>Создаём ценность</h3>
+                            <p>Каждый наш продукт решает конкретную проблему бизнеса. Мы не делаем "просто технологии" — мы создаём инструменты, которые приносят реальную прибыль.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mission-point">
+                        <div class="mission-point-emoji">⚡</div>
+                        <div>
+                            <h3>Быстрота реализации</h3>
+                            <p>От идеи до рабочего продукта — за минимальное время. Мы тестируем гипотезы, быстро запускаем MVP и масштабируем успешные решения.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mission-point">
+                        <div class="mission-point-emoji">🤝</div>
+                        <div>
+                            <h3>Партнёрский подход</h3>
+                            <p>Мы зарабатываем, когда зарабатываете вы. Наши продукты приносят результат — и это лучшая гарантия для наших клиентов.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mission-point">
+                        <div class="mission-point-emoji">🚀</div>
+                        <div>
+                            <h3>Инновации в действии</h3>
+                            <p>Искусственный интеллект — это не будущее, а настоящее. Мы делаем передовые технологии доступными для малого бизнеса уже сегодня.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h3>Быстрый запуск</h3>
-                    <p>Тестируем идеи, быстро запускаем MVP, упаковываем в лендинги и ботов, продаем через рекламу.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div>Успешных проектов</div>
                 </div>
-                <div class="feature-card">
-                    <h3>Гарантированный результат</h3>
-                    <p>Мы создаём продукты, которые дают результат — и зарабатываем на этом вместе с клиентами.</p>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div>Поддержка клиентов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div>Довольных клиентов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10+</div>
+                    <div>Готовых решений</div>
                 </div>
             </div>
         </div>
@@ -344,42 +581,73 @@
     <!-- Products section -->
     <section class="products" id="products">
         <div class="container">
-            <h2 class="section-title">Наши продукты</h2>
+            <h2 class="section-title">
+                <span class="emoji">🛍️</span>
+                Наши продукты
+            </h2>
             <div class="products-grid">
                 <div class="product-card">
                     <div class="product-image">🤖</div>
                     <div class="product-info">
-                        <h3>Франшиза Айрум</h3>
-                        <p>Готовый бизнес на базе Telegram-ботов с полной поддержкой.</p>
+                        <h3>🚀 Франшиза Айрум</h3>
+                        <div class="product-description">
+                            <p>Готовый бизнес на базе Telegram-ботов с полной поддержкой и обучением. Включает все необходимые инструменты для старта.</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>Готовые скрипты продаж</li>
+                                <li>Обучение и поддержка</li>
+                                <li>Маркетинг-кит</li>
+                            </ul>
+                        </div>
                         <div class="product-price">от 18 900 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <a href="#" class="cta-button">📌 Подробнее</a>
                     </div>
                 </div>
                 <div class="product-card">
                     <div class="product-image">🛠️</div>
                     <div class="product-info">
-                        <h3>Готовые Telegram-боты</h3>
-                        <p>Боты под ключ для автоматизации бизнес-процессов.</p>
+                        <h3>⚡ Готовые Telegram-боты</h3>
+                        <div class="product-description">
+                            <p>Боты под ключ для автоматизации бизнес-процессов. Решения для обработки заказов, CRM, маркетинга и поддержки клиентов.</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>Интеграция с платежами</li>
+                                <li>Готовые сценарии</li>
+                                <li>Техническая поддержка</li>
+                            </ul>
+                        </div>
                         <div class="product-price">от 8 000 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <a href="#" class="cta-button">📌 Подробнее</a>
                     </div>
                 </div>
                 <div class="product-card">
                     <div class="product-image">🎓</div>
                     <div class="product-info">
-                        <h3>Обучающие курсы</h3>
-                        <p>Курсы по созданию ботов, дизайну и бизнесу в digital.</p>
+                        <h3>🧠 Обучающие курсы</h3>
+                        <div class="product-description">
+                            <p>Курсы по созданию ботов, дизайну и бизнесу в digital. Практические знания от экспертов с реальным опытом.</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>Пошаговые инструкции</li>
+                                <li>Домашние задания</li>
+                                <li>Разбор кейсов</li>
+                            </ul>
+                        </div>
                         <div class="product-price">от 15 000 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <a href="#" class="cta-button">📌 Подробнее</a>
                     </div>
                 </div>
                 <div class="product-card">
                     <div class="product-image">🔑</div>
                     <div class="product-info">
-                        <h3>Индивидуальные решения</h3>
-                        <p>Разработка AI-решений под конкретные задачи вашего бизнеса.</p>
+                        <h3>💎 Индивидуальные решения</h3>
+                        <div class="product-description">
+                            <p>Разработка AI-решений под конкретные задачи вашего бизнеса. Анализ, проектирование и реализация под ключ.</p>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li>Персональный менеджер</li>
+                                <li>Гарантия результата</li>
+                                <li>Техническая документация</li>
+                            </ul>
+                        </div>
                         <div class="product-price">от 19 000 ₽</div>
-                        <a href="#" class="cta-button">Подробнее</a>
+                        <a href="#" class="cta-button">📌 Подробнее</a>
                     </div>
                 </div>
             </div>
@@ -387,22 +655,31 @@
     </section>
 
     <!-- Solutions section -->
-    <section class="features" id="solutions">
+    <section class="solutions" id="solutions">
         <div class="container">
-            <h2 class="section-title">Как мы решаем проблемы клиентов</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>Масштабирование бизнеса</h3>
-                    <p>Наши франшизы предоставляют готовые бизнес-модели для быстрого старта и масштабирования.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Автоматизация процессов</h3>
-                    <p>Telegram-боты и AI-инструменты автоматизируют рутинные задачи, экономя ваше время.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Обучение и поддержка</h3>
-                    <p>Курсы и 24/7 поддержка помогают клиентам быстро освоить новые инструменты.</p>
-                </div>
+            <h2 class="section-title">
+                <span class="emoji">💡</span>
+                Как мы решаем проблемы клиентов
+            </h2>
+            
+            <div class="solution-card">
+                <h3>🔍 Проблема: Не знают, как масштабироваться</h3>
+                <p><strong>Наше решение:</strong> Готовые франшизы с проверенными бизнес-моделями. Вы получаете не просто продукт, а полноценную систему для заработка с поддержкой на каждом этапе.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h3>💰 Проблема: Хотят дополнительный доход</h3>
+                <p><strong>Наше решение:</strong> Telegram-боты и автоматизированные системы, которые работают на вас 24/7. Пассивный доход без постоянного контроля.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h3>🔄 Проблема: Нет системы в бизнесе</h3>
+                <p><strong>Наше решение:</strong> Готовые инструменты автоматизации, которые структурируют процессы. От обработки заказов до CRM — всё в одном месте.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h3>🤖 Проблема: Запутались в технологиях ИИ</h3>
+                <p><strong>Наше решение:</strong> Простые и понятные интерфейсы. Мы делаем сложные технологии доступными без необходимости в технических знаниях.</p>
             </div>
         </div>
     </section>
@@ -412,29 +689,31 @@
         <div class="container">
             <div class="footer-container">
                 <div class="footer-column">
-                    <h3>BG GROUP IT</h3>
+                    <h3>🤖 BG GROUP IT</h3>
                     <p>Создаем AI-решения для малого бизнеса. Ваш цифровой отдел в одном окне.</p>
+                    <p style="margin-top: 1rem;">🔹 Поддержка 24/7<br>🔹 Гарантия результата<br>🔹 Опыт 5+ лет</p>
                 </div>
                 <div class="footer-column">
-                    <h3>Продукты</h3>
+                    <h3>🛍️ Продукты</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Франшизы</a></li>
-                        <li><a href="#">Telegram-боты</a></li>
-                        <li><a href="#">Обучающие курсы</a></li>
-                        <li><a href="#">Индивидуальные решения</a></li>
+                        <li>🚀 <a href="#">Франшизы</a></li>
+                        <li>⚡ <a href="#">Telegram-боты</a></li>
+                        <li>🧠 <a href="#">Обучающие курсы</a></li>
+                        <li>💎 <a href="#">Индивидуальные решения</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Контакты</h3>
+                    <h3>📞 Контакты</h3>
                     <ul class="footer-links">
-                        <li><a href="https://t.me/bggroupit" target="_blank">Telegram</a></li>
-                        <li><a href="https://vk.com/bggroupit" target="_blank">ВКонтакте</a></li>
-                        <li><a href="mailto:info@bggroupit.ru">Email</a></li>
+                        <li>📱 <a href="https://t.me/bggroupit" target="_blank">Telegram</a></li>
+                        <li>👥 <a href="https://vk.com/bggroupit" target="_blank">ВКонтакте</a></li>
+                        <li>✉️ <a href="mailto:info@bggroupit.ru">Email</a></li>
+                        <li>🕘 <a href="#">Круглосуточная поддержка</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 BG GROUP IT. Все права защищены.</p>
+                <p>&copy; 2023 BG GROUP IT. Все права защищены. 🚀</p>
             </div>
         </div>
     </footer>
