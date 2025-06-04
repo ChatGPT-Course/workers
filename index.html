@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BG GROUP IT - AI решения для бизнеса</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header styles */
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+        }
+        
+        /* Mobile menu button */
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .cta-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Hero section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: var(--text-light);
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Features section */
+        .features {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* Products section */
+        .products {
+            padding: 4rem 0;
+            background-color: var(--light-color);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            height: 200px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 1rem 0;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+        
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: var(--primary-color);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                transition: left 0.3s;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with navigation -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">BG <span>GROUP IT</span></a>
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#about">О компании</a></li>
+                    <li><a href="#products">Продукты</a></li>
+                    <li><a href="#solutions">Решения</a></li>
+                    <li><a href="#contacts">Контакты</a></li>
+                    <li><a href="#" class="cta-button">Telegram бот</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero section -->
+    <section class="hero">
+        <div class="container">
+            <h1>AI-решения для вашего бизнеса</h1>
+            <p>BG GROUP IT создает и продает продукты на базе искусственного интеллекта, которые помогают малому бизнесу автоматизировать процессы, сократить расходы и увеличить доход.</p>
+            <a href="#products" class="cta-button">Наши продукты</a>
+        </div>
+    </section>
+
+    <!-- About section -->
+    <section class="features" id="about">
+        <div class="container">
+            <h2 class="section-title">Наша миссия</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Создаем AI-продукты</h3>
+                    <p>Мы находим проблемы малого бизнеса и превращаем их в понятные решения на базе искусственного интеллекта.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Быстрый запуск</h3>
+                    <p>Тестируем идеи, быстро запускаем MVP, упаковываем в лендинги и ботов, продаем через рекламу.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Гарантированный результат</h3>
+                    <p>Мы создаём продукты, которые дают результат — и зарабатываем на этом вместе с клиентами.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Наши продукты</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">🤖</div>
+                    <div class="product-info">
+                        <h3>Франшиза Айрум</h3>
+                        <p>Готовый бизнес на базе Telegram-ботов с полной поддержкой.</p>
+                        <div class="product-price">от 18 900 ₽</div>
+                        <a href="#" class="cta-button">Подробнее</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">🛠️</div>
+                    <div class="product-info">
+                        <h3>Готовые Telegram-боты</h3>
+                        <p>Боты под ключ для автоматизации бизнес-процессов.</p>
+                        <div class="product-price">от 8 000 ₽</div>
+                        <a href="#" class="cta-button">Подробнее</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">🎓</div>
+                    <div class="product-info">
+                        <h3>Обучающие курсы</h3>
+                        <p>Курсы по созданию ботов, дизайну и бизнесу в digital.</p>
+                        <div class="product-price">от 15 000 ₽</div>
+                        <a href="#" class="cta-button">Подробнее</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">🔑</div>
+                    <div class="product-info">
+                        <h3>Индивидуальные решения</h3>
+                        <p>Разработка AI-решений под конкретные задачи вашего бизнеса.</p>
+                        <div class="product-price">от 19 000 ₽</div>
+                        <a href="#" class="cta-button">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions section -->
+    <section class="features" id="solutions">
+        <div class="container">
+            <h2 class="section-title">Как мы решаем проблемы клиентов</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Масштабирование бизнеса</h3>
+                    <p>Наши франшизы предоставляют готовые бизнес-модели для быстрого старта и масштабирования.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Автоматизация процессов</h3>
+                    <p>Telegram-боты и AI-инструменты автоматизируют рутинные задачи, экономя ваше время.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Обучение и поддержка</h3>
+                    <p>Курсы и 24/7 поддержка помогают клиентам быстро освоить новые инструменты.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacts">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>BG GROUP IT</h3>
+                    <p>Создаем AI-решения для малого бизнеса. Ваш цифровой отдел в одном окне.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Продукты</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Франшизы</a></li>
+                        <li><a href="#">Telegram-боты</a></li>
+                        <li><a href="#">Обучающие курсы</a></li>
+                        <li><a href="#">Индивидуальные решения</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://t.me/bggroupit" target="_blank">Telegram</a></li>
+                        <li><a href="https://vk.com/bggroupit" target="_blank">ВКонтакте</a></li>
+                        <li><a href="mailto:info@bggroupit.ru">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 BG GROUP IT. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
