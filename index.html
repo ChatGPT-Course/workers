@@ -70,38 +70,38 @@
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
             color: var(--text-light);
-            padding: 4rem 0;
+            padding: 2.5rem 0;
             text-align: center;
         }
         
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             margin-bottom: 1rem;
         }
         
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1rem;
             max-width: 800px;
             margin: 0 auto 2rem;
         }
 
         /* Информационный блок */
         .info-section {
-            padding: 4rem 0;
+            padding: 2.5rem 0;
             background: var(--light-color);
         }
 
         .info-title {
             text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
             color: var(--primary-color);
         }
 
         .info-buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
             max-width: 900px;
             margin: 0 auto;
         }
@@ -109,12 +109,12 @@
         .info-button {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
             color: white;
-            padding: 2rem;
-            border-radius: 15px;
+            padding: 1.2rem;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -135,19 +135,19 @@
         }
 
         .info-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
         .info-button h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
             position: relative;
             z-index: 1;
         }
 
         .info-button p {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.9;
             position: relative;
             z-index: 1;
@@ -168,65 +168,66 @@
 
         .info-modal-content {
             background: white;
-            margin: 3% auto;
+            margin: 0;
             padding: 0;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 700px;
-            max-height: 85vh;
-            overflow-y: auto;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             animation: modalSlideIn 0.4s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes modalSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(-50px) scale(0.9);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
 
         .info-modal-header {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
             color: white;
-            padding: 2.5rem;
-            border-radius: 20px 20px 0 0;
+            padding: 1.5rem;
             text-align: center;
             position: relative;
+            flex-shrink: 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .info-modal-header::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: var(--secondary-color);
-            border-radius: 2px;
+        .info-modal-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
         }
 
         .info-modal-body {
-            padding: 2.5rem;
+            padding: 1.5rem;
             color: var(--text-color);
+            overflow-y: auto;
+            flex: 1;
         }
 
         .info-modal-body h4 {
             color: var(--primary-color);
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             border-bottom: 2px solid var(--light-color);
             padding-bottom: 0.5rem;
         }
 
         .info-modal-body p {
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         .info-modal-body ul {
@@ -235,10 +236,11 @@
         }
 
         .info-modal-body li {
-            padding: 0.8rem 0;
+            padding: 0.6rem 0;
             border-bottom: 1px solid #eee;
             position: relative;
-            padding-left: 30px;
+            padding-left: 25px;
+            font-size: 0.9rem;
         }
 
         .info-modal-body li:before {
@@ -247,25 +249,25 @@
             left: 0;
             color: var(--success-color);
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .close-info-modal {
             color: white;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .close-info-modal:hover {
@@ -274,42 +276,42 @@
         
         /* Products section */
         .products {
-            padding: 4rem 0;
+            padding: 2.5rem 0;
             background-color: white;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
             color: var(--primary-color);
         }
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
         
         .product-card {
             background-color: white;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border: 2px solid transparent;
         }
         
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             border-color: var(--secondary-color);
         }
 
         .product-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 1.5rem;
+            padding: 1rem;
             text-align: center;
             position: relative;
         }
@@ -317,56 +319,57 @@
         .product-header::after {
             content: "";
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 20px solid var(--secondary-color);
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid var(--secondary-color);
         }
 
         .product-title {
-            font-size: 1.3rem;
+            font-size: 1rem;
             font-weight: bold;
             margin: 0;
         }
         
         .product-image {
-            height: 180px;
+            height: 100px;
             background: linear-gradient(45deg, var(--light-color), #d5dbdb);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary-color);
-            font-size: 4rem;
-            margin: 20px 0;
+            font-size: 2.5rem;
+            margin: 15px 0;
         }
         
         .product-info {
-            padding: 1.5rem 2rem 2rem;
+            padding: 1rem;
         }
         
         .product-description {
             color: var(--text-color);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            font-size: 0.85rem;
         }
         
         .product-price {
             font-weight: bold;
             color: var(--accent-color);
-            margin: 1.5rem 0;
-            font-size: 1.4rem;
+            margin: 1rem 0;
+            font-size: 1.1rem;
             text-align: center;
         }
 
         .cta-button {
             background: linear-gradient(135deg, var(--accent-color), #c0392b);
             color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
@@ -374,14 +377,14 @@
             text-align: center;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             width: 100%;
         }
         
         .cta-button:hover {
             background: linear-gradient(135deg, #c0392b, #a93226);
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
         }
         
         /* Product Modal */
@@ -399,33 +402,34 @@
 
         .product-modal-content {
             background-color: white;
-            margin: 3% auto;
+            margin: 0;
             padding: 0;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 650px;
-            max-height: 85vh;
-            overflow-y: auto;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             animation: modalSlideIn 0.4s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .close {
             color: white;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .close:hover {
@@ -435,42 +439,48 @@
         .modal-header {
             background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
             color: white;
-            padding: 2.5rem;
-            border-radius: 20px 20px 0 0;
+            padding: 1.5rem;
             text-align: center;
             position: relative;
+            flex-shrink: 0;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .modal-header h2 {
-            margin: 0 0 0.8rem 0;
-            font-size: 1.6rem;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.3rem;
         }
 
         .modal-price {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: #ffd700;
         }
 
         .modal-body {
-            padding: 2.5rem;
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
         }
 
         .product-description {
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
             color: var(--text-color);
         }
 
         .product-features {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .product-features h4 {
             color: var(--primary-color);
-            margin-bottom: 1.2rem;
-            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
             border-bottom: 2px solid var(--light-color);
             padding-bottom: 0.5rem;
         }
@@ -481,10 +491,11 @@
         }
 
         .product-features li {
-            padding: 0.8rem 0;
+            padding: 0.6rem 0;
             border-bottom: 1px solid #eee;
             position: relative;
-            padding-left: 30px;
+            padding-left: 25px;
+            font-size: 0.9rem;
         }
 
         .product-features li:before {
@@ -493,57 +504,58 @@
             left: 0;
             color: var(--success-color);
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .contact-section {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 2rem;
-            border-radius: 15px;
+            padding: 1.5rem;
+            border-radius: 12px;
             text-align: center;
         }
 
         .contact-section h4 {
             color: var(--primary-color);
-            margin-bottom: 1.2rem;
-            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
         }
 
         .telegram-contact {
             display: inline-block;
             background: linear-gradient(135deg, var(--secondary-color), #2980b9);
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            font-size: 0.9rem;
         }
 
         .telegram-contact:hover {
             background: linear-gradient(135deg, #2980b9, #1f618d);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
         }
 
         /* Footer */
         footer {
             background-color: var(--dark-color);
             color: var(--text-light);
-            padding: 3rem 0 1rem;
+            padding: 2rem 0 1rem;
         }
         
         .footer-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .footer-column h3 {
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
             color: var(--secondary-color);
         }
         
@@ -552,7 +564,7 @@
         }
         
         .footer-links li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         
         .footer-links a {
@@ -560,6 +572,7 @@
             text-decoration: none;
             opacity: 0.8;
             transition: opacity 0.3s;
+            font-size: 0.9rem;
         }
         
         .footer-links a:hover {
@@ -569,50 +582,139 @@
         
         .copyright {
             text-align: center;
-            padding-top: 1.5rem;
+            padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0.7;
+            font-size: 0.9rem;
         }
         
         /* Mobile styles */
         @media (max-width: 768px) {
+            .hero {
+                padding: 2rem 0;
+            }
+            
             .hero h1 {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
             
             .hero p {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
             
+            .info-section, .products {
+                padding: 2rem 0;
+            }
+
             .info-buttons {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 0.8rem;
             }
 
             .info-button {
-                padding: 1.5rem;
+                padding: 1rem;
+            }
+
+            .info-button h3 {
+                font-size: 0.9rem;
+            }
+
+            .info-button p {
+                font-size: 0.75rem;
             }
 
             .products-grid {
+                gap: 0.8rem;
+            }
+
+            .product-image {
+                height: 80px;
+                font-size: 2rem;
+                margin: 10px 0;
+            }
+
+            .product-info {
+                padding: 0.8rem;
+            }
+
+            .product-description {
+                font-size: 0.8rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .product-price {
+                font-size: 1rem;
+                margin: 0.8rem 0;
+            }
+
+            .cta-button {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .info-modal-content,
+            .product-modal-content {
+                border-radius: 0;
+            }
+
+            .info-modal-header,
+            .modal-header {
+                padding: 1.2rem;
+                min-height: 70px;
+            }
+
+            .info-modal-header h2,
+            .modal-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .modal-price {
+                font-size: 1.1rem;
+            }
+
+            .info-modal-body,
+            .modal-body {
+                padding: 1.2rem;
+            }
+
+            .footer-container {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 1rem;
             }
 
-            .product-modal-content,
-            .info-modal-content {
-                margin: 5% auto;
-                width: 95%;
-                max-height: 90vh;
+            .contact-section {
+                padding: 1.2rem;
             }
 
-            .modal-header,
-            .info-modal-header {
-                padding: 2rem;
+            .telegram-contact {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
             }
 
-            .modal-body,
-            .info-modal-body {
-                padding: 2rem;
+            .hero h1 {
+                font-size: 1.4rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .info-title, .section-title {
+                font-size: 1.3rem;
+            }
+
+            .product-title {
+                font-size: 0.9rem;
+            }
+
+            .product-image {
+                height: 70px;
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -663,7 +765,7 @@
         <div class="container">
             <h2 class="section-title">Наши продукты</h2>
             <div class="products-grid">
-                <div class="product-card">
+                <div class="product-card" id="franchise-airum">
                     <div class="product-header">
                         <h3 class="product-title">Франшиза Айрум</h3>
                     </div>
@@ -675,7 +777,7 @@
                     </div>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="franchise-ai-bot">
                     <div class="product-header">
                         <h3 class="product-title">Франшиза AI-бота</h3>
                     </div>
@@ -687,7 +789,7 @@
                     </div>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="education">
                     <div class="product-header">
                         <h3 class="product-title">Обучение</h3>
                     </div>
@@ -699,7 +801,7 @@
                     </div>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="telegram-bots">
                     <div class="product-header">
                         <h3 class="product-title">Готовые Telegram-боты</h3>
                     </div>
@@ -711,7 +813,7 @@
                     </div>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="vpn-service">
                     <div class="product-header">
                         <h3 class="product-title">Сервис VPN-ботов</h3>
                     </div>
@@ -723,7 +825,7 @@
                     </div>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="individual-projects">
                     <div class="product-header">
                         <h3 class="product-title">Индивидуальные проекты</h3>
                     </div>
@@ -749,23 +851,23 @@
                 <div class="footer-column">
                     <h3>Продукты</h3>
                     <ul class="footer-links">
-                        <li><a href="#products">Франшизы</a></li>
-                        <li><a href="#products">Обучение</a></li>
-                        <li><a href="#products">Telegram-боты</a></li>
-                        <li><a href="#products">Индивидуальные решения</a></li>
+                        <li><a href="#franchise-airum">Франшиза Айрум</a></li>
+                        <li><a href="#franchise-ai-bot">Франшиза AI-бота</a></li>
+                        <li><a href="#education">Обучение</a></li>
+                        <li><a href="#telegram-bots">Telegram-боты</a></li>
+                        <li><a href="#vpn-service">VPN-сервис</a></li>
+                        <li><a href="#individual-projects">Индивидуальные решения</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Контакты</h3>
                     <ul class="footer-links">
                         <li><a href="https://t.me/bggroupit" target="_blank">Telegram</a></li>
-                        <li><a href="https://vk.com/bggroupit" target="_blank">ВКонтакте</a></li>
-                        <li><a href="mailto:info@bggroupit.ru">Email</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 BG GROUP IT. Все права защищены.</p>
+                <p>&copy; 2025 BG GROUP IT. Все права защищены.</p>
             </div>
         </div>
     </footer>
@@ -786,8 +888,8 @@
     <!-- Модальное окно продуктов -->
     <div id="productModal" class="product-modal">
         <div class="product-modal-content">
-            <span class="close" onclick="closeProductModal()">&times;</span>
             <div class="modal-header">
+                <span class="close" onclick="closeProductModal()">&times;</span>
                 <h2 id="modalProductTitle">Название продукта</h2>
                 <div class="modal-price" id="modalProductPrice">от 0 ₽</div>
             </div>
@@ -812,6 +914,16 @@
     </div>
 
     <script>
+        // Соответствие продуктов и их ID карточек
+        const productCardIds = {
+            'Франшиза Айрум': 'franchise-airum',
+            'Франшиза AI-бота (BG Partner AI)': 'franchise-ai-bot',
+            'Обучение (курсы по Telegram-ботам, дизайну и бизнесу)': 'education',
+            'Готовые Telegram-боты под задачи': 'telegram-bots',
+            'Сервис создания VPN-ботов': 'vpn-service',
+            'Индивидуальные проекты под бизнес': 'individual-projects'
+        };
+
         // Информационный контент для модальных окон
         const infoContent = {
             'about': {
@@ -1026,11 +1138,52 @@
             window.open('https://t.me/iltuocapo', '_blank');
         }
 
+        // Функция плавной прокрутки к карточке продукта
+        function scrollToProduct(productName) {
+            const cardId = productCardIds[productName];
+            if (cardId) {
+                const element = document.getElementById(cardId);
+                if (element) {
+                    element.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    // Добавляем небольшую анимацию выделения
+                    element.style.transform = 'scale(1.02)';
+                    element.style.transition = 'transform 0.3s ease';
+                    setTimeout(() => {
+                        element.style.transform = 'scale(1)';
+                    }, 1000);
+                }
+            }
+        }
+
         // Обработка кнопок "Подробнее"
         document.querySelectorAll('.product-detail').forEach(button => {
             button.addEventListener('click', function() {
                 const productName = this.getAttribute('data-product');
                 openProductModal(productName);
+            });
+        });
+
+        // Обработка ссылок в футере для прокрутки к продуктам
+        document.querySelectorAll('.footer-links a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    // Добавляем анимацию выделения
+                    targetElement.style.transform = 'scale(1.02)';
+                    targetElement.style.transition = 'transform 0.3s ease';
+                    setTimeout(() => {
+                        targetElement.style.transform = 'scale(1)';
+                    }, 1000);
+                }
             });
         });
 
@@ -1043,6 +1196,14 @@
                 closeProductModal();
             }
             if (event.target === infoModal) {
+                closeInfoModal();
+            }
+        });
+
+        // Обработка клавиши Escape для закрытия модальных окон
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeProductModal();
                 closeInfoModal();
             }
         });
