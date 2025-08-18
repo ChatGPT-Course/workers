@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аренда рабочих</title>
+    <title>Персонал 96 | Аренда рабочих</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -37,7 +37,19 @@
         
         .app-title {
             font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .app-main-title {
             font-size: 18px;
+        }
+        
+        .app-sub-title {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
         }
         
         .menu-button {
@@ -153,6 +165,8 @@
             justify-content: space-between;
             align-items: center;
             background-color: #ffffff;
+            position: relative;
+            overflow: hidden;
         }
         
         .menu-item:last-child {
@@ -162,6 +176,25 @@
         .menu-arrow {
             color: #888;
             font-size: 16px;
+        }
+        
+        .menu-item-wave {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.05);
+            transition: width 0.5s ease;
+            z-index: 0;
+        }
+        
+        .menu-item-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
         
         .buttons-container {
@@ -174,14 +207,14 @@
         }
         
         .order-button {
-            flex: 1;
+            flex: 1.4;
             background-color: #FF8C00;
             color: white;
             border: none;
             border-radius: 10px;
             padding: 10px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             text-align: center;
             outline: none;
@@ -206,7 +239,10 @@
 </head>
 <body>
     <div class="header">
-        <div class="app-title">Аренда рабочих</div>
+        <div class="app-title">
+            <span class="app-main-title">Персонал 96</span>
+            <span class="app-sub-title">Аренда рабочих</span>
+        </div>
         <div class="menu-button" id="menu-button">
             <div class="menu-line"></div>
             <div class="menu-line"></div>
@@ -225,21 +261,30 @@
             </div>
         </div>
         
-        <div class="menu-item">
-            В профиль
-            <span class="menu-arrow">></span>
+        <div class="menu-item" id="profile-menu-item">
+            <div class="menu-item-wave" id="profile-wave"></div>
+            <div class="menu-item-content">
+                В профиль
+                <span class="menu-arrow">></span>
+            </div>
         </div>
         <div class="menu-item">
-            История заказов
-            <span class="menu-arrow">></span>
+            <div class="menu-item-content">
+                История заказов
+                <span class="menu-arrow">></span>
+            </div>
         </div>
         <div class="menu-item">
-            Поддержка
-            <span class="menu-arrow">></span>
+            <div class="menu-item-content">
+                Поддержка
+                <span class="menu-arrow">></span>
+            </div>
         </div>
         <div class="menu-item">
-            О нас
-            <span class="menu-arrow">></span>
+            <div class="menu-item-content">
+                О нас
+                <span class="menu-arrow">></span>
+            </div>
         </div>
     </div>
     
@@ -257,6 +302,11 @@
             // Получаем данные пользователя
             const initData = tg.initDataUnsafe;
             const user = initData.user || {};
+            
+            // Сохраняем ID пользователя в cookie
+            if (user.id) {
+                document.cookie = `tg_user_id=${user.id}; path=/; max-age=31536000`; // Сохраняем на 1 год
+            }
             
             // Устанавливаем данные профиля в меню
             const profileName = document.getElementById('profile-name');
@@ -284,18 +334,34 @@
                 profileAvatar.textContent = user.first_name.charAt(0).toUpperCase();
             }
             
+            // Флаг для отслеживания состояния анимации меню
+            let isMenuAnimating = false;
+            
             // Обработчик кнопки меню
             menuButton.addEventListener('click', function() {
+                if (isMenuAnimating) return;
+                
+                isMenuAnimating = true;
+                
                 if (menuOverlay.classList.contains('active')) {
                     menuOverlay.classList.remove('active');
                     setTimeout(() => {
                         menuOverlay.style.display = 'none';
+                        isMenuAnimating = false;
                     }, 500);
                     menuButton.classList.remove('close');
                 } else {
                     menuOverlay.style.display = 'block';
+                    // Сбрасываем любые предыдущие анимации
+                    menuOverlay.style.transition = 'none';
+                    menuOverlay.style.transform = 'translateY(-100%)';
+                    // Принудительное перерисовывание
+                    void menuOverlay.offsetWidth;
+                    // Включаем анимацию
+                    menuOverlay.style.transition = 'transform 0.5s ease';
                     setTimeout(() => {
                         menuOverlay.classList.add('active');
+                        isMenuAnimating = false;
                     }, 10);
                     menuButton.classList.add('close');
                 }
@@ -309,6 +375,16 @@
             // Обработчик кнопки расчета стоимости
             document.getElementById('calculate-button').addEventListener('click', function() {
                 tg.showAlert('Функция расчета стоимости будет реализована позже');
+            });
+            
+            // Обработчик пункта меню "В профиль"
+            document.getElementById('profile-menu-item').addEventListener('click', function() {
+                const wave = document.getElementById('profile-wave');
+                wave.style.width = '100%';
+                
+                setTimeout(() => {
+                    window.location.href = 'profile.html';
+                }, 500);
             });
             
             // Разворачиваем приложение на весь экран
