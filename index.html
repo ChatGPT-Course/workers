@@ -11,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Убираем синюю обводку */
         }
         
         body {
@@ -28,6 +29,8 @@
             padding: 12px 16px;
             height: 56px;
             background-color: #f5f5f5;
+            margin: 8px 8px 0;
+            border-radius: 10px;
         }
         
         .app-title {
@@ -40,6 +43,7 @@
             height: 24px;
             position: relative;
             cursor: pointer;
+            outline: none;
         }
         
         .menu-line {
@@ -78,7 +82,7 @@
         
         .menu-overlay {
             position: fixed;
-            top: 56px;
+            top: 72px; /* 56px + 16px отступа */
             left: 0;
             right: 0;
             bottom: 0;
@@ -89,15 +93,22 @@
         
         .menu-content {
             background-color: #ffffff;
-            border-top: 1px solid #e0e0e0;
-            padding: 16px;
+            border-radius: 10px;
+            margin: 0 8px;
+            overflow: hidden;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .menu-overlay.active .menu-content {
+            transform: translateY(0);
+            opacity: 1;
         }
         
         .profile-card {
             background-color: #f0f0f0;
-            border-radius: 10px;
             padding: 16px;
-            margin-bottom: 16px;
             display: flex;
             align-items: center;
         }
@@ -109,6 +120,7 @@
             background-color: #e0e0e0;
             overflow: hidden;
             margin-right: 12px;
+            flex-shrink: 0;
         }
         
         .profile-avatar img {
@@ -124,13 +136,12 @@
         .profile-name {
             font-weight: 500;
             font-size: 16px;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         
-        .profile-username {
+        .profile-name span {
             color: #666;
-            font-size: 14px;
-            margin-bottom: 4px;
+            font-weight: normal;
         }
         
         .profile-id {
@@ -139,7 +150,7 @@
         }
         
         .menu-item {
-            padding: 14px 0;
+            padding: 16px;
             border-bottom: 1px solid #f0f0f0;
             font-size: 16px;
         }
@@ -148,36 +159,11 @@
             border-bottom: none;
         }
         
-        .page-title {
-            font-size: 22px;
-            font-weight: 600;
-            padding: 16px;
-            padding-bottom: 8px;
-            text-align: center;
-        }
-        
-        .question-block {
-            padding: 16px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .question {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        
-        .answer {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.4;
-        }
-        
         .order-button {
             position: fixed;
             bottom: 16px;
-            left: 16px;
-            right: 16px;
+            left: 8px;
+            right: 8px;
             background-color: #FF8C00;
             color: white;
             border: none;
@@ -187,6 +173,12 @@
             font-weight: 500;
             cursor: pointer;
             text-align: center;
+            outline: none;
+        }
+        
+        /* Убираем outline при фокусе */
+        button:focus, .menu-button:focus {
+            outline: none;
         }
     </style>
 </head>
@@ -207,8 +199,7 @@
                     <!-- Аватар будет загружен через JS -->
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name" id="profile-name">Гость</div>
-                    <div class="profile-username" id="profile-username"></div>
+                    <div class="profile-name" id="profile-name">Гость <span id="profile-username"></span></div>
                     <div class="profile-id" id="profile-id"></div>
                 </div>
             </div>
@@ -218,23 +209,6 @@
             <div class="menu-item">Поддержка</div>
             <div class="menu-item">О нас</div>
         </div>
-    </div>
-    
-    <div class="page-title">Мои грузчики.ру</div>
-    
-    <div class="question-block">
-        <div class="question">Какие услуги можно заказать?</div>
-        <div class="answer">Погрузка, разгрузка, переезды квартир и офисов, перенос мебели и других грузов</div>
-    </div>
-    
-    <div class="question-block">
-        <div class="question">Сколько стоит?</div>
-        <div class="answer">Стоимость рассчитывается индивидуально в зависимости от объема работ и времени выполнения</div>
-    </div>
-    
-    <div class="question-block">
-        <div class="question">Какие работы не смогут выполнить грузчики?</div>
-        <div class="answer">Строительные, монтажные, электромонтажные и другие специализированные работы</div>
     </div>
     
     <button class="order-button" id="order-button">Создать заказ</button>
@@ -256,11 +230,13 @@
             const profileAvatar = document.getElementById('profile-avatar');
             
             if (user.first_name || user.last_name) {
-                profileName.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                const nameElement = document.createElement('span');
+                nameElement.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                profileName.prepend(nameElement);
             }
             
             if (user.username) {
-                profileUsername.textContent = `@${user.username}`;
+                profileUsername.textContent = `(@${user.username})`;
             }
             
             if (user.id) {
@@ -275,11 +251,17 @@
             
             // Обработчик кнопки меню
             menuButton.addEventListener('click', function() {
-                if (menuOverlay.style.display === 'block') {
-                    menuOverlay.style.display = 'none';
+                if (menuOverlay.classList.contains('active')) {
+                    menuOverlay.classList.remove('active');
+                    setTimeout(() => {
+                        menuOverlay.style.display = 'none';
+                    }, 500);
                     menuButton.classList.remove('close');
                 } else {
                     menuOverlay.style.display = 'block';
+                    setTimeout(() => {
+                        menuOverlay.classList.add('active');
+                    }, 10);
                     menuButton.classList.add('close');
                 }
             });
