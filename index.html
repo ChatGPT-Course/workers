@@ -19,7 +19,7 @@
             color: #000000;
             max-width: 100%;
             overflow-x: hidden;
-            padding-bottom: 80px;
+            padding: 8px 8px 80px 8px;
         }
         
         .header {
@@ -29,7 +29,6 @@
             padding: 12px 16px;
             height: 56px;
             background-color: #e0e0e0;
-            margin: 0 8px;
             border-radius: 10px 10px 0 0;
             position: relative;
             z-index: 101;
@@ -110,7 +109,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transform: translateY(-100%);
             transition: transform 0.3s ease;
-            padding-top: 10px;
             overflow: hidden;
         }
         
@@ -123,9 +121,11 @@
             height: 1px;
             background-color: #888;
             width: 100%;
-            margin: 5px 0;
             opacity: 0;
             transition: opacity 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         
         .menu-overlay.active .divider {
@@ -137,6 +137,7 @@
             padding: 16px;
             display: flex;
             align-items: center;
+            margin-top: 1px;
         }
         
         .profile-avatar {
@@ -189,8 +190,13 @@
             transition: transform 0.1s ease;
         }
         
-        .menu-item:active {
+        .menu-item:active:not(.disabled) {
             transform: scale(0.98);
+        }
+        
+        .menu-item.disabled {
+            opacity: 0.7;
+            pointer-events: none;
         }
         
         .menu-item:last-child {
@@ -259,14 +265,6 @@
             outline: none;
             line-height: 1.2;
         }
-        
-        .worker-image {
-            display: block;
-            max-width: 80%;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
     </style>
 </head>
 <body>
@@ -283,6 +281,7 @@
     </div>
     
     <div class="menu-overlay" id="menu-overlay">
+        <div class="divider"></div>
         <div class="profile-card" id="profile-card">
             <div class="profile-avatar" id="profile-avatar">
                 <!-- Аватар будет загружен через JS -->
@@ -292,8 +291,6 @@
                 <div class="profile-id" id="profile-id"></div>
             </div>
         </div>
-        
-        <div class="divider"></div>
         
         <div class="menu-item" id="profile-menu-item">
             <div class="menu-item-wave" id="profile-wave"></div>
@@ -324,8 +321,6 @@
             </div>
         </div>
     </div>
-    
-    <img src="https://github.com/ChatGPT-Course/workers/blob/main/avatar/worker.jpg?raw=true" alt="Рабочий" class="worker-image">
     
     <div class="buttons-container">
         <button class="order-button" id="order-button">Создать<br>заказ</button>
@@ -401,26 +396,37 @@
             });
             
             // Функция для обработки нажатия на пункты меню
-            function handleMenuItemClick(itemId, waveId, pageUrl) {
+            function handleMenuItemClick(itemId, waveId, pageName) {
                 const item = document.getElementById(itemId);
                 const wave = document.getElementById(waveId);
                 
                 item.addEventListener('click', function() {
+                    // Блокируем кнопку на 1 секунду
+                    item.classList.add('disabled');
+                    
+                    // Запускаем волновую анимацию
                     wave.style.width = '100%';
                     
+                    // Показываем сообщение
+                    tg.showAlert(`Переход к странице ${pageName}`);
+                    
+                    // Через 500ms сбрасываем анимацию
                     setTimeout(() => {
-                        if (pageUrl) {
-                            window.location.href = pageUrl;
-                        }
+                        wave.style.width = '0';
                     }, 500);
+                    
+                    // Разблокируем кнопку через 1 секунду
+                    setTimeout(() => {
+                        item.classList.remove('disabled');
+                    }, 1000);
                 });
             }
             
             // Назначаем обработчики для всех пунктов меню
-            handleMenuItemClick('profile-menu-item', 'profile-wave', 'profile.html');
-            handleMenuItemClick('history-menu-item', 'history-wave', 'history.html');
-            handleMenuItemClick('support-menu-item', 'support-wave', 'support.html');
-            handleMenuItemClick('about-menu-item', 'about-wave', 'about.html');
+            handleMenuItemClick('profile-menu-item', 'profile-wave', 'профиля');
+            handleMenuItemClick('history-menu-item', 'history-wave', 'истории заказов');
+            handleMenuItemClick('support-menu-item', 'support-wave', 'поддержки');
+            handleMenuItemClick('about-menu-item', 'about-wave', 'о нас');
             
             // Разворачиваем приложение на весь экран
             tg.expand();
