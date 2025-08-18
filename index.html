@@ -28,7 +28,7 @@
             align-items: center;
             padding: 12px 16px;
             height: 56px;
-            background-color: #f5f5f5;
+            background-color: #e0e0e0;
             margin: 0 8px;
             border-radius: 10px 10px 0 0;
             position: relative;
@@ -38,7 +38,9 @@
         .app-title {
             font-weight: 600;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
             line-height: 1.2;
         }
         
@@ -101,7 +103,7 @@
             top: 56px;
             left: 8px;
             right: 8px;
-            background-color: #f5f5f5;
+            background-color: #e0e0e0;
             border-radius: 0 0 10px 10px;
             display: none;
             z-index: 100;
@@ -117,8 +119,21 @@
             display: block;
         }
         
+        .divider {
+            height: 1px;
+            background-color: #888;
+            width: 100%;
+            margin: 5px 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .menu-overlay.active .divider {
+            opacity: 1;
+        }
+        
         .profile-card {
-            background-color: #f5f5f5;
+            background-color: #e0e0e0;
             padding: 16px;
             display: flex;
             align-items: center;
@@ -128,7 +143,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: #e0e0e0;
+            background-color: #d0d0d0;
             overflow: hidden;
             margin-right: 12px;
             flex-shrink: 0;
@@ -171,6 +186,11 @@
             background-color: #ffffff;
             position: relative;
             overflow: hidden;
+            transition: transform 0.1s ease;
+        }
+        
+        .menu-item:active {
+            transform: scale(0.98);
         }
         
         .menu-item:last-child {
@@ -239,13 +259,21 @@
             outline: none;
             line-height: 1.2;
         }
+        
+        .worker-image {
+            display: block;
+            max-width: 80%;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="app-title">
             <span class="app-main-title">Персонал 96</span>
-            <span class="app-sub-title">Аренда рабочих</span>
+            <span class="app-sub-title">| Аренда рабочих</span>
         </div>
         <button class="menu-button" id="menu-button">
             <div class="menu-line"></div>
@@ -265,6 +293,8 @@
             </div>
         </div>
         
+        <div class="divider"></div>
+        
         <div class="menu-item" id="profile-menu-item">
             <div class="menu-item-wave" id="profile-wave"></div>
             <div class="menu-item-content">
@@ -272,25 +302,30 @@
                 <span class="menu-arrow">></span>
             </div>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" id="history-menu-item">
+            <div class="menu-item-wave" id="history-wave"></div>
             <div class="menu-item-content">
                 История заказов
                 <span class="menu-arrow">></span>
             </div>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" id="support-menu-item">
+            <div class="menu-item-wave" id="support-wave"></div>
             <div class="menu-item-content">
                 Поддержка
                 <span class="menu-arrow">></span>
             </div>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" id="about-menu-item">
+            <div class="menu-item-wave" id="about-wave"></div>
             <div class="menu-item-content">
                 О нас
                 <span class="menu-arrow">></span>
             </div>
         </div>
     </div>
+    
+    <img src="https://github.com/ChatGPT-Course/workers/blob/main/avatar/worker.jpg?raw=true" alt="Рабочий" class="worker-image">
     
     <div class="buttons-container">
         <button class="order-button" id="order-button">Создать<br>заказ</button>
@@ -365,15 +400,27 @@
                 tg.showAlert('Функция расчета стоимости будет реализована позже');
             });
             
-            // Обработчик пункта меню "В профиль"
-            document.getElementById('profile-menu-item').addEventListener('click', function() {
-                const wave = document.getElementById('profile-wave');
-                wave.style.width = '100%';
+            // Функция для обработки нажатия на пункты меню
+            function handleMenuItemClick(itemId, waveId, pageUrl) {
+                const item = document.getElementById(itemId);
+                const wave = document.getElementById(waveId);
                 
-                setTimeout(() => {
-                    window.location.href = 'profile.html';
-                }, 500);
-            });
+                item.addEventListener('click', function() {
+                    wave.style.width = '100%';
+                    
+                    setTimeout(() => {
+                        if (pageUrl) {
+                            window.location.href = pageUrl;
+                        }
+                    }, 500);
+                });
+            }
+            
+            // Назначаем обработчики для всех пунктов меню
+            handleMenuItemClick('profile-menu-item', 'profile-wave', 'profile.html');
+            handleMenuItemClick('history-menu-item', 'history-wave', 'history.html');
+            handleMenuItemClick('support-menu-item', 'support-wave', 'support.html');
+            handleMenuItemClick('about-menu-item', 'about-wave', 'about.html');
             
             // Разворачиваем приложение на весь экран
             tg.expand();
