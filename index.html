@@ -1,1222 +1,186 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BG GROUP IT - AI решения для бизнеса</title>
+    <title>Мои грузчики</title>
     <style>
-        :root {
-            --primary-color: #34495e;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --text-color: #333;
-            --text-light: #fff;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         
         body {
-            background-color: #f5f5f5;
-            color: var(--text-color);
-            line-height: 1.6;
+            background-color: white;
+            color: #333;
+            max-width: 100%;
+            overflow-x: hidden;
         }
         
-        .container {
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #eee;
+            overflow: hidden;
+        }
+        
+        .avatar img {
             width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+            height: 100%;
+            object-fit: cover;
         }
         
-        /* Header styles */
-        header {
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        .user-name {
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .menu-button {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        
+        .menu-line {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            border-radius: 2px;
+        }
+        
+        .content {
+            padding: 16px;
+        }
+        
+        .banner {
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .banner-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .question {
+            margin-bottom: 16px;
+        }
+        
+        .question-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .question-answer {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .order-button {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 400px;
+            background-color: #3390ec;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
-        .header-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-        
-        .logo span {
-            color: var(--secondary-color);
-        }
-        
-        /* Hero section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
-            color: var(--text-light);
-            padding: 2.5rem 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-
-        /* Информационный блок */
-        .info-section {
-            padding: 2.5rem 0;
-            background: var(--light-color);
-        }
-
-        .info-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .info-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .info-button {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
-            color: white;
-            padding: 1.2rem;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-button::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .info-button:hover::before {
-            left: 100%;
-        }
-
-        .info-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .info-button h3 {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .info-button p {
-            font-size: 0.8rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Модальные окна для информации */
-        .info-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-        }
-
-        .info-modal-content {
-            background: white;
-            margin: 0;
-            padding: 0;
-            border-radius: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.4s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .info-modal-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-            flex-shrink: 0;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .info-modal-header h2 {
-            font-size: 1.2rem;
-            margin: 0;
-        }
-
-        .info-modal-body {
-            padding: 1.5rem;
-            color: var(--text-color);
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .info-modal-body h4 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            border-bottom: 2px solid var(--light-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .info-modal-body p {
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .info-modal-body ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .info-modal-body li {
-            padding: 0.6rem 0;
-            border-bottom: 1px solid #eee;
-            position: relative;
-            padding-left: 25px;
-            font-size: 0.9rem;
-        }
-
-        .info-modal-body li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--success-color);
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .close-info-modal {
-            color: white;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .close-info-modal:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Products section */
-        .products {
-            padding: 2.5rem 0;
-            background-color: white;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        
-        .product-card {
-            background-color: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            border-color: var(--secondary-color);
-        }
-
-        .product-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .product-header::after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid var(--secondary-color);
-        }
-
-        .product-title {
-            font-size: 1rem;
-            font-weight: bold;
-            margin: 0;
-        }
-        
-        .product-image {
-            height: 100px;
-            background: linear-gradient(45deg, var(--light-color), #d5dbdb);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 2.5rem;
-            margin: 15px 0;
-        }
-        
-        .product-info {
-            padding: 1rem;
-        }
-        
-        .product-description {
-            color: var(--text-color);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-            font-size: 0.85rem;
-        }
-        
-        .product-price {
-            font-weight: bold;
-            color: var(--accent-color);
-            margin: 1rem 0;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, var(--accent-color), #c0392b);
-            color: white;
-            padding: 0.7rem 1rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: block;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            width: 100%;
-        }
-        
-        .cta-button:hover {
-            background: linear-gradient(135deg, #c0392b, #a93226);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-        }
-        
-        /* Product Modal */
-        .product-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        .product-modal-content {
-            background-color: white;
-            margin: 0;
-            padding: 0;
-            border-radius: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.4s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .close {
-            color: white;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .close:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-            flex-shrink: 0;
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .modal-header h2 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.3rem;
-        }
-
-        .modal-price {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .product-description {
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
-
-        .product-features {
-            margin-bottom: 1.5rem;
-        }
-
-        .product-features h4 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            border-bottom: 2px solid var(--light-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .product-features ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .product-features li {
-            padding: 0.6rem 0;
-            border-bottom: 1px solid #eee;
-            position: relative;
-            padding-left: 25px;
-            font-size: 0.9rem;
-        }
-
-        .product-features li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--success-color);
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .contact-section {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .contact-section h4 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .telegram-contact {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-            font-size: 0.9rem;
-        }
-
-        .telegram-contact:hover {
-            background: linear-gradient(135deg, #2980b9, #1f618d);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: var(--text-light);
-            padding: 2rem 0 1rem;
-        }
-        
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .footer-column h3 {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.4rem;
-        }
-        
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .footer-links a:hover {
-            opacity: 1;
-            color: var(--secondary-color);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-        
-        /* Mobile styles */
-        @media (max-width: 768px) {
-            .hero {
-                padding: 2rem 0;
-            }
-            
-            .hero h1 {
-                font-size: 1.6rem;
-            }
-            
-            .hero p {
-                font-size: 0.95rem;
-            }
-            
-            .info-section, .products {
-                padding: 2rem 0;
-            }
-
-            .info-buttons {
-                gap: 0.8rem;
-            }
-
-            .info-button {
-                padding: 1rem;
-            }
-
-            .info-button h3 {
-                font-size: 0.9rem;
-            }
-
-            .info-button p {
-                font-size: 0.75rem;
-            }
-
-            .products-grid {
-                gap: 0.8rem;
-            }
-
-            .product-image {
-                height: 80px;
-                font-size: 2rem;
-                margin: 10px 0;
-            }
-
-            .product-info {
-                padding: 0.8rem;
-            }
-
-            .product-description {
-                font-size: 0.8rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .product-price {
-                font-size: 1rem;
-                margin: 0.8rem 0;
-            }
-
-            .cta-button {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.8rem;
-            }
-
-            .info-modal-content,
-            .product-modal-content {
-                border-radius: 0;
-            }
-
-            .info-modal-header,
-            .modal-header {
-                padding: 1.2rem;
-                min-height: 70px;
-            }
-
-            .info-modal-header h2,
-            .modal-header h2 {
-                font-size: 1.1rem;
-            }
-
-            .modal-price {
-                font-size: 1.1rem;
-            }
-
-            .info-modal-body,
-            .modal-body {
-                padding: 1.2rem;
-            }
-
-            .footer-container {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .contact-section {
-                padding: 1.2rem;
-            }
-
-            .telegram-contact {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 10px;
-            }
-
-            .hero h1 {
-                font-size: 1.4rem;
-            }
-
-            .hero p {
-                font-size: 0.9rem;
-            }
-
-            .info-title, .section-title {
-                font-size: 1.3rem;
-            }
-
-            .product-title {
-                font-size: 0.9rem;
-            }
-
-            .product-image {
-                height: 70px;
-                font-size: 1.8rem;
-            }
+        .order-button:hover {
+            background-color: #2a7fd1;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <a href="#" class="logo">BG <span>GROUP IT</span></a>
+    <div class="header">
+        <div class="user-info">
+            <div class="avatar">
+                <img id="user-avatar" src="" alt="Аватар">
+            </div>
+            <div class="user-name" id="user-name">Имя Фамилия</div>
         </div>
-    </header>
-
-    <!-- Hero section -->
-    <section class="hero">
-        <div class="container">
-            <h1>AI-решения для вашего бизнеса</h1>
-            <p>BG GROUP IT создает и продает продукты на базе искусственного интеллекта, которые помогают малому бизнесу автоматизировать процессы, сократить расходы и увеличить доход.</p>
-        </div>
-    </section>
-
-    <!-- Информационный блок -->
-    <section class="info-section">
-        <div class="container">
-            <h2 class="info-title">Узнайте больше о BG GROUP IT</h2>
-            <div class="info-buttons">
-                <button class="info-button" onclick="openInfoModal('about')">
-                    <h3>🏢 О компании</h3>
-                    <p>Кто мы и чем занимаемся</p>
-                </button>
-                <button class="info-button" onclick="openInfoModal('mission')">
-                    <h3>🎯 Наша миссия</h3>
-                    <p>Цели и принципы работы</p>
-                </button>
-                <button class="info-button" onclick="openInfoModal('approach')">
-                    <h3>⚡ Наш подход</h3>
-                    <p>Как мы работаем и развиваемся</p>
-                </button>
-                <button class="info-button" onclick="openInfoModal('solutions')">
-                    <h3>💡 Решения проблем</h3>
-                    <p>Как мы помогаем клиентам</p>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Products section -->
-    <section class="products" id="products">
-        <div class="container">
-            <h2 class="section-title">Наши продукты</h2>
-            <div class="products-grid">
-                <div class="product-card" id="franchise-airum">
-                    <div class="product-header">
-                        <h3 class="product-title">Франшиза Айрум</h3>
-                    </div>
-                    <div class="product-image">🚀</div>
-                    <div class="product-info">
-                        <p class="product-description">Готовый бизнес на базе Telegram-ботов с полной поддержкой и обучением.</p>
-                        <div class="product-price">от 18 900 ₽</div>
-                        <button class="cta-button product-detail" data-product="Франшиза Айрум">Подробнее</button>
-                    </div>
-                </div>
-                
-                <div class="product-card" id="franchise-ai-bot">
-                    <div class="product-header">
-                        <h3 class="product-title">Франшиза AI-бота</h3>
-                    </div>
-                    <div class="product-image">🤖</div>
-                    <div class="product-info">
-                        <p class="product-description">Готовая система для заработка на AI-ботах с автоматизацией процессов.</p>
-                        <div class="product-price">от 19 900 ₽</div>
-                        <button class="cta-button product-detail" data-product="Франшиза AI-бота (BG Partner AI)">Подробнее</button>
-                    </div>
-                </div>
-                
-                <div class="product-card" id="education">
-                    <div class="product-header">
-                        <h3 class="product-title">Обучение</h3>
-                    </div>
-                    <div class="product-image">🎓</div>
-                    <div class="product-info">
-                        <p class="product-description">Курсы по созданию Telegram-ботов, дизайну и бизнесу в digital.</p>
-                        <div class="product-price">от 15 000 ₽</div>
-                        <button class="cta-button product-detail" data-product="Обучение (курсы по Telegram-ботам, дизайну и бизнесу)">Подробнее</button>
-                    </div>
-                </div>
-                
-                <div class="product-card" id="telegram-bots">
-                    <div class="product-header">
-                        <h3 class="product-title">Готовые Telegram-боты</h3>
-                    </div>
-                    <div class="product-image">⚙️</div>
-                    <div class="product-info">
-                        <p class="product-description">Боты под ключ для автоматизации бизнес-процессов и маркетинга.</p>
-                        <div class="product-price">от 8 000 ₽</div>
-                        <button class="cta-button product-detail" data-product="Готовые Telegram-боты под задачи">Подробнее</button>
-                    </div>
-                </div>
-                
-                <div class="product-card" id="vpn-service">
-                    <div class="product-header">
-                        <h3 class="product-title">Сервис VPN-ботов</h3>
-                    </div>
-                    <div class="product-image">🔒</div>
-                    <div class="product-info">
-                        <p class="product-description">Автоматизированное создание и настройка VPN-ботов для Telegram.</p>
-                        <div class="product-price">от 12 000 ₽</div>
-                        <button class="cta-button product-detail" data-product="Сервис создания VPN-ботов">Подробнее</button>
-                    </div>
-                </div>
-                
-                <div class="product-card" id="individual-projects">
-                    <div class="product-header">
-                        <h3 class="product-title">Индивидуальные проекты</h3>
-                    </div>
-                    <div class="product-image">💼</div>
-                    <div class="product-info">
-                        <p class="product-description">Разработка AI-решений под конкретные задачи вашего бизнеса.</p>
-                        <div class="product-price">от 19 000 ₽</div>
-                        <button class="cta-button product-detail" data-product="Индивидуальные проекты под бизнес">Подробнее</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-column">
-                    <h3>BG GROUP IT</h3>
-                    <p>Создаем AI-решения для малого бизнеса. Ваш цифровой отдел в одном окне.</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Продукты</h3>
-                    <ul class="footer-links">
-                        <li><a href="#franchise-airum">Франшиза Айрум</a></li>
-                        <li><a href="#franchise-ai-bot">Франшиза AI-бота</a></li>
-                        <li><a href="#education">Обучение</a></li>
-                        <li><a href="#telegram-bots">Telegram-боты</a></li>
-                        <li><a href="#vpn-service">VPN-сервис</a></li>
-                        <li><a href="#individual-projects">Индивидуальные решения</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Контакты</h3>
-                    <ul class="footer-links">
-                        <li><a href="https://t.me/bggroupit" target="_blank">Telegram</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 BG GROUP IT. Все права защищены.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Информационные модальные окна -->
-    <div id="infoModal" class="info-modal">
-        <div class="info-modal-content">
-            <div class="info-modal-header">
-                <span class="close-info-modal" onclick="closeInfoModal()">&times;</span>
-                <h2 id="infoModalTitle">Заголовок</h2>
-            </div>
-            <div class="info-modal-body" id="infoModalBody">
-                <!-- Контент будет добавлен динамически -->
-            </div>
+        <div class="menu-button">
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
         </div>
     </div>
-
-    <!-- Модальное окно продуктов -->
-    <div id="productModal" class="product-modal">
-        <div class="product-modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeProductModal()">&times;</span>
-                <h2 id="modalProductTitle">Название продукта</h2>
-                <div class="modal-price" id="modalProductPrice">от 0 ₽</div>
-            </div>
-            <div class="modal-body">
-                <div class="product-description" id="modalProductDescription">
-                    Подробное описание продукта появится здесь...
-                </div>
-                <div class="product-features" id="modalProductFeatures">
-                    <h4>Что входит:</h4>
-                    <ul id="modalFeaturesList">
-                        <!-- Список функций будет добавлен динамически -->
-                    </ul>
-                </div>
-                <div class="contact-section">
-                    <h4>Связаться с нами:</h4>
-                    <a href="#" class="telegram-contact" onclick="openTelegramContact()">
-                        📱 Написать в Telegram @iltuocapo
-                    </a>
-                </div>
-            </div>
+    
+    <div class="content">
+        <div class="banner">
+            <div class="banner-title">Мои грузчики.ру</div>
+            <div>Быстрая и надежная помощь с переездами</div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">Какие услуги можно заказать?</div>
+            <div class="question-answer">Погрузка, разгрузка, переезды, перенос мебели и другие грузоперевозочные услуги</div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">Сколько стоит?</div>
+            <div class="question-answer">Стоимость зависит от объема работ и времени. Минимальный заказ от 1000 рублей</div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">Какие работы не смогут выполнить грузчики?</div>
+            <div class="question-answer">Грузчики не выполняют строительные, монтажные и другие специализированные работы</div>
         </div>
     </div>
-
+    
+    <button class="order-button">Создать заказ</button>
+    
     <script>
-        // Соответствие продуктов и их ID карточек
-        const productCardIds = {
-            'Франшиза Айрум': 'franchise-airum',
-            'Франшиза AI-бота (BG Partner AI)': 'franchise-ai-bot',
-            'Обучение (курсы по Telegram-ботам, дизайну и бизнесу)': 'education',
-            'Готовые Telegram-боты под задачи': 'telegram-bots',
-            'Сервис создания VPN-ботов': 'vpn-service',
-            'Индивидуальные проекты под бизнес': 'individual-projects'
-        };
-
-        // Информационный контент для модальных окон
-        const infoContent = {
-            'about': {
-                title: '🏢 О компании BG GROUP IT',
-                content: `
-                    <h4>Кто мы</h4>
-                    <p>BG GROUP IT — компания, которая массово создаёт и продаёт решения на базе искусственного интеллекта. Мы не просто автоматизируем процессы — мы помогаем зарабатывать на готовых продуктах, ботах, сервисах и инструментах.</p>
-                    
-                    <h4>Наши достижения</h4>
-                    <ul>
-                        <li>Более 100 успешно запущенных проектов</li>
-                        <li>Команда из 15+ экспертов</li>
-                        <li>Клиенты в 20+ городах России</li>
-                        <li>Средний рост дохода клиентов на 300%</li>
-                        <li>98% положительных отзывов</li>
-                    </ul>
-                    
-                    <h4>Почему выбирают нас</h4>
-                    <p>Мы сочетаем передовые технологии AI с практическим опытом ведения бизнеса. Каждое наше решение — это проверенный инструмент для роста доходов.</p>
-                `
-            },
-            'mission': {
-                title: '🎯 Наша миссия',
-                content: `
-                    <h4>Главная цель</h4>
-                    <p>Сформировать бренд №1 по ИИ-решениям в Telegram и товарке. Выйти на стабильные 250 000 ₽ в день оборота, создать команду из 10+ человек, автоматизировать до 80% процессов.</p>
-                    
-                    <h4>Наши принципы</h4>
-                    <ul>
-                        <li>Результат превыше всего</li>
-                        <li>Простота в сложных технологиях</li>
-                        <li>Постоянное развитие и обучение</li>
-                        <li>Прозрачность в работе с клиентами</li>
-                        <li>Качество каждого продукта</li>
-                    </ul>
-                    
-                    <h4>Видение будущего</h4>
-                    <p>Мы видим мир, где каждый малый бизнес имеет доступ к передовым AI-технологиям без необходимости в дорогостоящих IT-отделах. Наша задача — сделать это реальностью.</p>
-                `
-            },
-            'approach': {
-                title: '⚡ Наш подход к работе',
-                content: `
-                    <h4>Системный подход</h4>
-                    <p>Мы тестируем идеи, быстро запускаем MVP, упаковываем в лендинги и ботов, продаём через рекламу. Главная сила — в системном подходе и быстром выводе продуктов на рынок.</p>
-                    
-                    <h4>Этапы работы</h4>
-                    <ul>
-                        <li>Анализ потребностей рынка</li>
-                        <li>Быстрое создание прототипа (MVP)</li>
-                        <li>Тестирование на реальных клиентах</li>
-                        <li>Масштабирование успешных решений</li>
-                        <li>Постоянная оптимизация и улучшение</li>
-                    </ul>
-                    
-                    <h4>Технологический стек</h4>
-                    <p>Мы используем современные AI-технологии: машинное обучение, обработка естественного языка, компьютерное зрение. Все решения интегрируются с популярными платформами и сервисами.</p>
-                `
-            },
-            'solutions': {
-                title: '💡 Как мы решаем проблемы клиентов',
-                content: `
-                    <h4>Проблема: Не знают, как масштабироваться</h4>
-                    <p><strong>Наше решение:</strong> Готовые франшизы с проверенными бизнес-моделями. Вы получаете не просто продукт, а полноценную систему для заработка с поддержкой на каждом этапе.</p>
-                    
-                    <h4>Проблема: Хотят дополнительный доход</h4>
-                    <p><strong>Наше решение:</strong> Telegram-боты и автоматизированные системы, которые работают на вас 24/7. Пассивный доход без постоянного контроля.</p>
-                    
-                    <h4>Проблема: Нет системы в бизнесе</h4>
-                    <p><strong>Наше решение:</strong> Готовые инструменты автоматизации, которые структурируют процессы. От обработки заказов до CRM — всё в одном месте.</p>
-                    
-                    <h4>Проблема: Запутались в технологиях ИИ</h4>
-                    <p><strong>Наше решение:</strong> Простые и понятные интерфейсы. Мы делаем сложные технологии доступными без необходимости в технических знаниях.</p>
-                `
-            }
-        };
-
-        // Подробные данные о продуктах
-        const productDetails = {
-            'Франшиза Айрум': {
-                title: 'Франшиза Айрум',
-                price: 'от 18 900 ₽',
-                description: 'Готовый бизнес на базе Telegram-ботов с полной поддержкой и обучением. Начните зарабатывать на цифровых продуктах уже сегодня.',
-                features: [
-                    'Готовый к запуску Telegram-бот',
-                    'Полное обучение работе с системой',
-                    'Техническая поддержка 24/7',
-                    'Маркетинговые материалы',
-                    'Система автоматизации продаж',
-                    'Личный кабинет для управления'
-                ]
-            },
-            'Франшиза AI-бота (BG Partner AI)': {
-                title: 'Франшиза AI-бота (BG Partner AI)',
-                price: 'от 19 900 ₽',
-                description: 'Готовая система для заработка на AI-ботах с автоматизацией процессов. Современные технологии искусственного интеллекта для вашего бизнеса.',
-                features: [
-                    'AI-бот с машинным обучением',
-                    'Система автоматической обработки запросов',
-                    'Интеграция с популярными мессенджерами',
-                    'Аналитика и отчеты',
-                    'Обучение персонала',
-                    'Постоянные обновления алгоритмов'
-                ]
-            },
-            'Обучение (курсы по Telegram-ботам, дизайну и бизнесу)': {
-                title: 'Обучение',
-                price: 'от 15 000 ₽',
-                description: 'Курсы по созданию Telegram-ботов, дизайну и бизнесу в digital. Получите востребованные навыки и начните зарабатывать на цифровых продуктах.',
-                features: [
-                    'Создание Telegram-ботов с нуля',
-                    'Основы UI/UX дизайна',
-                    'Монетизация цифровых продуктов',
-                    'Практические задания',
-                    'Сертификат об окончании',
-                    'Поддержка наставника'
-                ]
-            },
-            'Готовые Telegram-боты под задачи': {
-                title: 'Готовые Telegram-боты',
-                price: 'от 8 000 ₽',
-                description: 'Боты под ключ для автоматизации бизнес-процессов и маркетинга. Экономьте время и увеличивайте эффективность вашего бизнеса.',
-                features: [
-                    'Автоматизация заказов',
-                    'CRM-система в Telegram',
-                    'Система уведомлений',
-                    'Интеграция с платежными системами',
-                    'Аналитика продаж',
-                    'Техническая поддержка'
-                ]
-            },
-            'Сервис создания VPN-ботов': {
-                title: 'Сервис создания VPN-ботов',
-                price: 'от 12 000 ₽',
-                description: 'Автоматизированное создание и настройка VPN-ботов для Telegram. Готовое решение для запуска VPN-сервиса.',
-                features: [
-                    'Автоматическое создание VPN-серверов',
-                    'Система управления подписками',
-                    'Интеграция с платежными системами',
-                    'Мониторинг работы серверов',
-                    'Панель администратора',
-                    'Техническая поддержка'
-                ]
-            },
-            'Индивидуальные проекты под бизнес': {
-                title: 'Индивидуальные проекты',
-                price: 'от 19 000 ₽',
-                description: 'Разработка AI-решений под конкретные задачи вашего бизнеса. Персональный подход к автоматизации ваших процессов.',
-                features: [
-                    'Анализ потребностей бизнеса',
-                    'Индивидуальная разработка',
-                    'Интеграция с существующими системами',
-                    'Обучение персонала',
-                    'Гарантия на разработку',
-                    'Постоянная техподдержка'
-                ]
-            }
-        };
-
-        // Функции для информационных модальных окон
-        function openInfoModal(type) {
-            const modal = document.getElementById('infoModal');
-            const content = infoContent[type];
-            
-            if (content) {
-                document.getElementById('infoModalTitle').textContent = content.title;
-                document.getElementById('infoModalBody').innerHTML = content.content;
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeInfoModal() {
-            const modal = document.getElementById('infoModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Функции для модальных окон продуктов
-        function openProductModal(productName) {
-            const modal = document.getElementById('productModal');
-            const product = productDetails[productName];
-            
-            if (product) {
-                document.getElementById('modalProductTitle').textContent = product.title;
-                document.getElementById('modalProductPrice').textContent = product.price;
-                document.getElementById('modalProductDescription').textContent = product.description;
-                
-                const featuresList = document.getElementById('modalFeaturesList');
-                featuresList.innerHTML = '';
-                product.features.forEach(feature => {
-                    const li = document.createElement('li');
-                    li.textContent = feature;
-                    featuresList.appendChild(li);
-                });
-                
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeProductModal() {
-            const modal = document.getElementById('productModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function openTelegramContact() {
+        // Получаем данные пользователя из Telegram WebApp
+        document.addEventListener('DOMContentLoaded', function() {
             if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.close();
-            }
-            window.open('https://t.me/iltuocapo', '_blank');
-        }
-
-        // Функция плавной прокрутки к карточке продукта
-        function scrollToProduct(productName) {
-            const cardId = productCardIds[productName];
-            if (cardId) {
-                const element = document.getElementById(cardId);
-                if (element) {
-                    element.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
-                    });
-                    // Добавляем небольшую анимацию выделения
-                    element.style.transform = 'scale(1.02)';
-                    element.style.transition = 'transform 0.3s ease';
-                    setTimeout(() => {
-                        element.style.transform = 'scale(1)';
-                    }, 1000);
+                const webApp = Telegram.WebApp;
+                
+                // Устанавливаем данные пользователя
+                const user = webApp.initDataUnsafe.user;
+                if (user) {
+                    document.getElementById('user-name').textContent = `${user.first_name} ${user.last_name || ''}`.trim();
+                    
+                    if (user.photo_url) {
+                        document.getElementById('user-avatar').src = user.photo_url;
+                    }
                 }
-            }
-        }
-
-        // Обработка кнопок "Подробнее"
-        document.querySelectorAll('.product-detail').forEach(button => {
-            button.addEventListener('click', function() {
-                const productName = this.getAttribute('data-product');
-                openProductModal(productName);
-            });
-        });
-
-        // Обработка ссылок в футере для прокрутки к продуктам
-        document.querySelectorAll('.footer-links a[href^="#"]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
-                    });
-                    // Добавляем анимацию выделения
-                    targetElement.style.transform = 'scale(1.02)';
-                    targetElement.style.transition = 'transform 0.3s ease';
-                    setTimeout(() => {
-                        targetElement.style.transform = 'scale(1)';
-                    }, 1000);
-                }
-            });
-        });
-
-        // Закрытие модальных окон при клике вне их
-        window.addEventListener('click', function(event) {
-            const productModal = document.getElementById('productModal');
-            const infoModal = document.getElementById('infoModal');
-            
-            if (event.target === productModal) {
-                closeProductModal();
-            }
-            if (event.target === infoModal) {
-                closeInfoModal();
+                
+                // Расширяем приложение на весь экран
+                webApp.expand();
             }
         });
-
-        // Обработка клавиши Escape для закрытия модальных окон
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeProductModal();
-                closeInfoModal();
-            }
-        });
-
-        // Инициализация Telegram WebApp
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
-            tg.setHeaderColor('#34495e');
-            tg.setBackgroundColor('#f5f5f5');
-            console.log('Telegram WebApp инициализирован');
-        }
     </script>
 </body>
 </html>
