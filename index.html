@@ -15,11 +15,12 @@
         }
         
         body {
-            background-color: #ffffff;
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 50%, #FFE082 100%);
             color: #000000;
             max-width: 100%;
             overflow-x: hidden;
-            padding-bottom: 80px;
+            padding-bottom: 16px;
+            min-height: 100vh;
         }
         
         .header {
@@ -44,6 +45,8 @@
             position: relative;
             cursor: pointer;
             outline: none;
+            background: none;
+            border: none;
         }
         
         .menu-line {
@@ -85,19 +88,20 @@
             top: 56px;
             left: 8px;
             right: 8px;
-            background-color: #ffffff;
+            background-color: #f5f5f5;
             border-radius: 0 0 10px 10px;
-            display: none;
             z-index: 100;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transform: translateY(-20px);
+            transform: translateY(-100%);
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.3s ease;
+            pointer-events: none;
         }
         
         .menu-overlay.active {
             transform: translateY(0);
             opacity: 1;
+            pointer-events: auto;
         }
         
         .profile-card {
@@ -146,11 +150,12 @@
         
         .menu-item {
             padding: 16px;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #e0e0e0;
             font-size: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: #f5f5f5;
         }
         
         .menu-item:last-child {
@@ -162,11 +167,15 @@
             font-size: 16px;
         }
         
+        .buttons-container {
+            display: flex;
+            gap: 8px;
+            padding: 0 8px;
+            margin-top: 16px;
+        }
+        
         .order-button {
-            position: fixed;
-            bottom: 16px;
-            left: 8px;
-            right: 8px;
+            flex: 1.5;
             background-color: #FF8C00;
             color: white;
             border: none;
@@ -177,17 +186,44 @@
             cursor: pointer;
             text-align: center;
             outline: none;
+            min-width: 0;
+        }
+        
+        .calculate-button {
+            flex: 1;
+            background-color: #B3E5FC;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            outline: none;
+            min-width: 0;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-20px); }
+            to { transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="app-title">Аренда рабочих</div>
-        <div class="menu-button" id="menu-button">
+        <button class="menu-button" id="menu-button">
             <div class="menu-line"></div>
             <div class="menu-line"></div>
             <div class="menu-line"></div>
-        </div>
+        </button>
     </div>
     
     <div class="menu-overlay" id="menu-overlay">
@@ -201,35 +237,44 @@
             </div>
         </div>
         
-        <div class="menu-item">
+        <div class="menu-item" id="profile-btn">
             В профиль
             <span class="menu-arrow">></span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" id="history-btn">
             История заказов
             <span class="menu-arrow">></span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" id="support-btn">
             Поддержка
             <span class="menu-arrow">></span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" id="about-btn">
             О нас
             <span class="menu-arrow">></span>
         </div>
     </div>
     
-    <button class="order-button" id="order-button">Создать заказ</button>
+    <div class="buttons-container">
+        <button class="order-button" id="order-button">Создать заказ</button>
+        <button class="calculate-button" id="calculate-button">Рассчитать<br>стоимость</button>
+    </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
             const menuButton = document.getElementById('menu-button');
             const menuOverlay = document.getElementById('menu-overlay');
+            let isAnimating = false;
             
             // Получаем данные пользователя
             const initData = tg.initDataUnsafe;
             const user = initData.user || {};
+            
+            // Сохраняем ID пользователя в cookie
+            if (user.id) {
+                document.cookie = `tg_user_id=${user.id}; path=/; max-age=2592000`; // 30 дней
+            }
             
             // Устанавливаем данные профиля в меню
             const profileName = document.getElementById('profile-name');
@@ -257,27 +302,56 @@
                 profileAvatar.textContent = user.first_name.charAt(0).toUpperCase();
             }
             
-            // Обработчик кнопки меню
+            // Обработчик кнопки меню с защитой от множественных нажатий
             menuButton.addEventListener('click', function() {
+                if (isAnimating) return;
+                
+                isAnimating = true;
+                
                 if (menuOverlay.classList.contains('active')) {
                     menuOverlay.classList.remove('active');
                     setTimeout(() => {
                         menuOverlay.style.display = 'none';
+                        isAnimating = false;
                     }, 500);
                     menuButton.classList.remove('close');
                 } else {
                     menuOverlay.style.display = 'block';
                     setTimeout(() => {
                         menuOverlay.classList.add('active');
+                        isAnimating = false;
                     }, 10);
                     menuButton.classList.add('close');
                 }
             });
             
-            // Обработчик кнопки создания заказа
+            // Обработчики кнопок
             document.getElementById('order-button').addEventListener('click', function() {
                 tg.showAlert('Функция создания заказа будет реализована позже');
             });
+            
+            document.getElementById('calculate-button').addEventListener('click', function() {
+                tg.showAlert('Функция расчета стоимости будет реализована позже');
+            });
+            
+            // Обработчики пунктов меню
+            function navigateTo(page) {
+                const userId = user.id || getCookie('tg_user_id');
+                tg.showAlert(`Переход на страницу: ${page} (UserID: ${userId})`);
+                // Здесь будет реальный переход на страницу с передачей user_id
+            }
+            
+            document.getElementById('profile-btn').addEventListener('click', () => navigateTo('profile'));
+            document.getElementById('history-btn').addEventListener('click', () => navigateTo('history'));
+            document.getElementById('support-btn').addEventListener('click', () => navigateTo('support'));
+            document.getElementById('about-btn').addEventListener('click', () => navigateTo('about'));
+            
+            // Функция для получения cookie
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
             
             // Разворачиваем приложение на весь экран
             tg.expand();
