@@ -107,14 +107,14 @@
             display: none;
             z-index: 100;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
+            max-height: 0;
+            transition: max-height 0.5s ease;
             overflow: hidden;
         }
         
         .menu-overlay.active {
-            transform: translateY(0);
             display: block;
+            max-height: 500px;
         }
         
         .divider {
@@ -122,10 +122,7 @@
             background-color: #888;
             width: 100%;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            position: absolute;
-            top: 0;
-            left: 0;
+            transition: opacity 0.3s ease 0.2s;
         }
         
         .menu-overlay.active .divider {
@@ -215,8 +212,14 @@
             width: 0;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.05);
-            transition: width 0.5s ease;
+            transition: width 0.5s ease, opacity 0.5s ease 0.5s;
             z-index: 0;
+            opacity: 1;
+        }
+        
+        .menu-item-wave.animate {
+            width: 100%;
+            opacity: 0;
         }
         
         .menu-item-content {
@@ -374,14 +377,8 @@
                 
                 if (menuOverlay.classList.contains('active')) {
                     menuOverlay.classList.remove('active');
-                    setTimeout(() => {
-                        menuOverlay.style.display = 'none';
-                    }, 300);
                 } else {
-                    menuOverlay.style.display = 'block';
-                    setTimeout(() => {
-                        menuOverlay.classList.add('active');
-                    }, 10);
+                    menuOverlay.classList.add('active');
                 }
             });
             
@@ -405,18 +402,18 @@
                     item.classList.add('disabled');
                     
                     // Запускаем волновую анимацию
-                    wave.style.width = '100%';
+                    wave.classList.add('animate');
                     
-                    // Показываем сообщение
-                    tg.showAlert(`Переход к странице ${pageName}`);
-                    
-                    // Через 500ms сбрасываем анимацию
+                    // Через 0.5s показываем сообщение
                     setTimeout(() => {
-                        wave.style.width = '0';
+                        tg.showAlert(`Переход к странице ${pageName}`);
                     }, 500);
                     
-                    // Разблокируем кнопку через 1 секунду
+                    // Через 1s сбрасываем анимацию и разблокируем кнопку
                     setTimeout(() => {
+                        wave.classList.remove('animate');
+                        wave.style.width = '0';
+                        wave.style.opacity = '1';
                         item.classList.remove('disabled');
                     }, 1000);
                 });
