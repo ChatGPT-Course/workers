@@ -1,1 +1,314 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заказа | Персонал 96</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f9f5f0;
+            color: #000000;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding: 8px 8px 80px 8px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            height: 56px;
+            background-color: #e0e0e0;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            z-index: 101;
+        }
+        
+        .app-title {
+            font-weight: 600;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.2;
+        }
+        
+        .app-main-title {
+            font-size: 18px;
+        }
+        
+        .app-sub-title {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        
+        .back-button {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            background: none;
+            border: none;
+            margin-right: 10px;
+        }
+        
+        .back-arrow {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            top: 12px;
+        }
+        
+        .back-arrow::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background-color: #000;
+            transform: rotate(-45deg);
+            left: 0;
+            top: -4px;
+        }
+        
+        .back-arrow::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background-color: #000;
+            transform: rotate(45deg);
+            left: 0;
+            top: 4px;
+        }
+        
+        .order-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #FF8C00;
+        }
+        
+        .textarea-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .next-button {
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            outline: none;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .counter-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .counter-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .counter-value {
+            margin: 0 12px;
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .hours-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <button class="back-button" id="back-button">
+                <div class="back-arrow"></div>
+            </button>
+            <div class="app-title">
+                <span class="app-main-title">Создание заказа</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="order-container">
+        <div class="order-section">
+            <div class="section-title">Количество исполнителей</div>
+            <div class="counter-container">
+                <button class="counter-button" id="decrease-workers">-</button>
+                <span class="counter-value" id="workers-count">1</span>
+                <button class="counter-button" id="increase-workers">+</button>
+            </div>
+        </div>
+        
+        <div class="order-section">
+            <div class="section-title">На сколько часов нужно?</div>
+            <input type="number" class="hours-input" id="hours-needed" min="1" value="1" placeholder="Количество часов">
+        </div>
+        
+        <div class="order-section">
+            <div class="section-title">Дайте название заказа</div>
+            <input type="text" class="input-field" id="order-title" placeholder="Например: раскидать дрова">
+        </div>
+        
+        <div class="order-section">
+            <div class="section-title">Что нужно делать?</div>
+            <textarea class="textarea-field" id="order-description" placeholder="Дайте описание и объем работ"></textarea>
+        </div>
+        
+        <div class="order-section">
+            <div class="section-title">Адрес оказания услуг</div>
+            <input type="text" class="input-field" id="order-address" placeholder="Введите адрес">
+        </div>
+        
+        <button class="next-button" id="next-button">Далее</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg = window.Telegram.WebApp;
+            
+            // Получаем ID пользователя из cookie
+            function getUserId() {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split('=');
+                    if (name === 'tg_user_id') {
+                        return value;
+                    }
+                }
+                return null;
+            }
+            
+            // Сохраняем ID пользователя
+            const userId = getUserId();
+            if (userId) {
+                console.log('User ID:', userId);
+            }
+            
+            // Обработчик кнопки назад
+            document.getElementById('back-button').addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            // Управление счетчиком исполнителей
+            let workersCount = 1;
+            const workersElement = document.getElementById('workers-count');
+            
+            document.getElementById('increase-workers').addEventListener('click', function() {
+                workersCount++;
+                workersElement.textContent = workersCount;
+            });
+            
+            document.getElementById('decrease-workers').addEventListener('click', function() {
+                if (workersCount > 1) {
+                    workersCount--;
+                    workersElement.textContent = workersCount;
+                }
+            });
+            
+            // Обработчик кнопки "Далее"
+            document.getElementById('next-button').addEventListener('click', function() {
+                const hours = document.getElementById('hours-needed').value;
+                const title = document.getElementById('order-title').value;
+                const description = document.getElementById('order-description').value;
+                const address = document.getElementById('order-address').value;
+                
+                // Простая валидация
+                if (!title || !description || !address || !hours) {
+                    tg.showAlert('Пожалуйста, заполните все обязательные поля');
+                    return;
+                }
+                
+                // Сохраняем данные заказа (можно сохранить в localStorage или отправить на сервер)
+                const orderData = {
+                    workers: workersCount,
+                    hours: hours,
+                    title: title,
+                    description: description,
+                    address: address,
+                    userId: userId
+                };
+                
+                localStorage.setItem('currentOrder', JSON.stringify(orderData));
+                
+                tg.showAlert('Заказ сохранен! В будущем здесь будет переход к следующему шагу.');
+            });
+            
+            // Разворачиваем приложение на весь экран
+            tg.expand();
+        });
+    </script>
+</body>
+</html>
