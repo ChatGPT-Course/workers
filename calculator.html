@@ -1,1 +1,261 @@
-calculato
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор стоимости | Персонал 96</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f9f5f0;
+            color: #000000;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding: 8px 8px 80px 8px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            height: 56px;
+            background-color: #e0e0e0;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            z-index: 101;
+        }
+        
+        .app-title {
+            font-weight: 600;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.2;
+        }
+        
+        .app-main-title {
+            font-size: 18px;
+        }
+        
+        .back-button {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            background: none;
+            border: none;
+            margin-right: 10px;
+        }
+        
+        .back-arrow {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            top: 12px;
+        }
+        
+        .back-arrow::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background-color: #000;
+            transform: rotate(-45deg);
+            left: 0;
+            top: -4px;
+        }
+        
+        .back-arrow::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background-color: #000;
+            transform: rotate(45deg);
+            left: 0;
+            top: 4px;
+        }
+        
+        .calculator-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calculator-section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .counter-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .counter-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .counter-value {
+            margin: 0 12px;
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .hours-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .calculate-button {
+            background-color: #8bc34a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            outline: none;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f0f8e6;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .result-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <button class="back-button" id="back-button">
+                <div class="back-arrow"></div>
+            </button>
+            <div class="app-title">
+                <span class="app-main-title">Калькулятор стоимости</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="calculator-container">
+        <div class="calculator-section">
+            <div class="section-title">Количество исполнителей</div>
+            <div class="counter-container">
+                <button class="counter-button" id="decrease-workers">-</button>
+                <span class="counter-value" id="workers-count">1</span>
+                <button class="counter-button" id="increase-workers">+</button>
+            </div>
+        </div>
+        
+        <div class="calculator-section">
+            <div class="section-title">На сколько часов нужно?</div>
+            <input type="number" class="hours-input" id="hours-needed" min="1" value="1" placeholder="Количество часов">
+        </div>
+        
+        <button class="calculate-button" id="calculate-button">Рассчитать стоимость</button>
+        
+        <div class="result-container" id="result-container">
+            <div class="result-title">Примерная стоимость:</div>
+            <div class="result-value" id="result-value">0 ₽</div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg = window.Telegram.WebApp;
+            
+            // Обработчик кнопки назад
+            document.getElementById('back-button').addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            // Управление счетчиком исполнителей
+            let workersCount = 1;
+            const workersElement = document.getElementById('workers-count');
+            
+            document.getElementById('increase-workers').addEventListener('click', function() {
+                workersCount++;
+                workersElement.textContent = workersCount;
+            });
+            
+            document.getElementById('decrease-workers').addEventListener('click', function() {
+                if (workersCount > 1) {
+                    workersCount--;
+                    workersElement.textContent = workersCount;
+                }
+            });
+            
+            // Обработчик кнопки расчета
+            document.getElementById('calculate-button').addEventListener('click', function() {
+                const hours = parseInt(document.getElementById('hours-needed').value) || 1;
+                
+                // Пример расчета стоимости (500 руб/час за каждого работника)
+                const costPerHour = 500;
+                const totalCost = workersCount * hours * costPerHour;
+                
+                // Показываем результат
+                document.getElementById('result-value').textContent = `${totalCost.toLocaleString('ru-RU')} ₽`;
+                document.getElementById('result-container').style.display = 'block';
+                
+                tg.showAlert(`Стоимость рассчитана: ${totalCost.toLocaleString('ru-RU')} ₽`);
+            });
+            
+            // Разворачиваем приложение на весь экран
+            tg.expand();
+        });
+    </script>
+</body>
+</html>
