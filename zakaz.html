@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создание заказа | Персонал 96</title>
+    <title>Новый заказ | Персонал 96</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -19,7 +20,7 @@
             color: #000000;
             max-width: 100%;
             overflow-x: hidden;
-            padding: 8px 8px 80px 8px;
+            padding: 8px 8px 100px 8px;
         }
         
         .header {
@@ -29,87 +30,88 @@
             padding: 12px 16px;
             height: 56px;
             background-color: #e0e0e0;
-            border-radius: 10px 10px 0 0;
-            position: relative;
-            z-index: 101;
+            border-radius: 10px;
+            position: sticky;
+            top: 8px;
+            z-index: 100;
+            margin-bottom: 16px;
         }
         
-        .app-title {
+        .header-title {
             font-weight: 600;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-            line-height: 1.2;
-        }
-        
-        .app-main-title {
             font-size: 18px;
+            flex: 1;
+            text-align: center;
         }
         
-        .app-sub-title {
-            font-size: 14px;
-            font-weight: 500;
-            opacity: 0.8;
-        }
-        
-        .back-button {
-            width: 24px;
-            height: 24px;
-            position: relative;
-            cursor: pointer;
-            outline: none;
-            background: none;
+        .back-button, .help-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #d0d0d0;
             border: none;
-            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
         
-        .back-arrow {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background-color: #000;
-            top: 12px;
-        }
-        
-        .back-arrow::before {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 2px;
-            background-color: #000;
-            transform: rotate(-45deg);
-            left: 0;
-            top: -4px;
-        }
-        
-        .back-arrow::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 2px;
-            background-color: #000;
-            transform: rotate(45deg);
-            left: 0;
-            top: 4px;
-        }
-        
-        .order-container {
+        .section {
             background-color: white;
             border-radius: 10px;
             padding: 16px;
-            margin-top: 8px;
+            margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .order-section {
-            margin-bottom: 20px;
         }
         
         .section-title {
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .worker-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .worker-card {
+            flex: 1;
+            min-width: 140px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .worker-card.selected {
+            border-color: #FF8C00;
+            background-color: #fff8f0;
+        }
+        
+        .worker-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #FF8C00;
+        }
+        
+        .worker-name {
+            font-weight: 500;
+            font-size: 14px;
         }
         
         .input-field {
@@ -135,21 +137,6 @@
             margin-bottom: 12px;
             resize: vertical;
             min-height: 100px;
-        }
-        
-        .next-button {
-            background-color: #FF8C00;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            outline: none;
-            width: 100%;
-            margin-top: 20px;
         }
         
         .counter-container {
@@ -180,7 +167,7 @@
             text-align: center;
         }
         
-        .hours-input {
+        .datetime-input {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -188,52 +175,197 @@
             font-size: 16px;
             margin-bottom: 12px;
         }
+        
+        .contact-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .contact-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .contact-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .contact-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .add-contact-btn {
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        
+        .reset-btn {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .next-button {
+            position: fixed;
+            bottom: 16px;
+            left: 8px;
+            right: 8px;
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            z-index: 99;
+        }
+        
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <div style="display: flex; align-items: center;">
-            <button class="back-button" id="back-button">
-                <div class="back-arrow"></div>
-            </button>
-            <div class="app-title">
-                <span class="app-main-title">Создание заказа</span>
+        <button class="back-button" id="back-button">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-title">Новый заказ</div>
+        <button class="help-button" id="help-button">
+            <i class="fas fa-question"></i>
+        </button>
+    </div>
+    
+    <!-- Выбор типа рабочего -->
+    <div class="section" id="worker-type-section">
+        <div class="section-title">
+            <i class="fas fa-hard-hat"></i>
+            <span>Выберите тип рабочего</span>
+        </div>
+        <div class="worker-cards">
+            <div class="worker-card" data-type="general">
+                <div class="worker-icon"><i class="fas fa-tools"></i></div>
+                <div class="worker-name">Разнорабочий</div>
+            </div>
+            <div class="worker-card" data-type="loader">
+                <div class="worker-icon"><i class="fas fa-box"></i></div>
+                <div class="worker-name">Грузчик</div>
+            </div>
+            <div class="worker-card" data-type="cleaner">
+                <div class="worker-icon"><i class="fas fa-broom"></i></div>
+                <div class="worker-name">Уборщик</div>
             </div>
         </div>
     </div>
     
-    <div class="order-container">
-        <div class="order-section">
-            <div class="section-title">Количество исполнителей</div>
-            <div class="counter-container">
-                <button class="counter-button" id="decrease-workers">-</button>
-                <span class="counter-value" id="workers-count">1</span>
-                <button class="counter-button" id="increase-workers">+</button>
+    <!-- Дата и время (скрыто изначально) -->
+    <div class="section hidden" id="datetime-section">
+        <div class="section-title">
+            <i class="far fa-calendar-alt"></i>
+            <span>Дата и время выполнения</span>
+        </div>
+        <input type="datetime-local" class="datetime-input" id="order-datetime">
+    </div>
+    
+    <!-- Количество исполнителей (скрыто изначально) -->
+    <div class="section hidden" id="workers-section">
+        <div class="section-title">
+            <i class="fas fa-users"></i>
+            <span>Количество исполнителей</span>
+        </div>
+        <div class="counter-container">
+            <button class="counter-button" id="decrease-workers">-</button>
+            <span class="counter-value" id="workers-count">1</span>
+            <button class="counter-button" id="increase-workers">+</button>
+        </div>
+    </div>
+    
+    <!-- Часы работы (скрыто изначально) -->
+    <div class="section hidden" id="hours-section">
+        <div class="section-title">
+            <i class="far fa-clock"></i>
+            <span>На сколько часов нужно?</span>
+        </div>
+        <div class="counter-container">
+            <button class="counter-button" id="decrease-hours">-</button>
+            <span class="counter-value" id="hours-count">1</span>
+            <button class="counter-button" id="increase-hours">+</button>
+        </div>
+    </div>
+    
+    <!-- Описание заказа (скрыто изначально) -->
+    <div class="section hidden" id="description-section">
+        <div class="section-title">
+            <i class="far fa-edit"></i>
+            <span>Опишите заказ</span>
+        </div>
+        <input type="text" class="input-field" id="order-title" placeholder="Например: раскидать дрова">
+        <textarea class="textarea-field" id="order-description" placeholder="Например: Дайте описание объем работ"></textarea>
+    </div>
+    
+    <!-- Адрес (скрыто изначально) -->
+    <div class="section hidden" id="address-section">
+        <div class="section-title">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Адрес оказания услуг</span>
+        </div>
+        <input type="text" class="input-field" id="order-address" placeholder="Адрес заказа">
+        <input type="text" class="input-field" id="address-instructions" placeholder="Как добраться до адреса">
+    </div>
+    
+    <!-- Контакты (скрыто изначально) -->
+    <div class="section hidden" id="contacts-section">
+        <div class="section-title">
+            <i class="fas fa-address-book"></i>
+            <span>С кем связаться по прибытию</span>
+        </div>
+        <div id="contacts-container">
+            <div class="contact-row">
+                <input type="text" class="contact-input" placeholder="Имя">
+                <input type="tel" class="contact-input" placeholder="Номер телефона">
+                <div class="contact-actions">
+                    <button class="contact-action-btn reset-btn" title="Сбросить">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <div class="order-section">
-            <div class="section-title">На сколько часов нужно?</div>
-            <input type="number" class="hours-input" id="hours-needed" min="1" value="1" placeholder="Количество часов">
-        </div>
-        
-        <div class="order-section">
-            <div class="section-title">Дайте название заказа</div>
-            <input type="text" class="input-field" id="order-title" placeholder="Например: раскидать дрова">
-        </div>
-        
-        <div class="order-section">
-            <div class="section-title">Что нужно делать?</div>
-            <textarea class="textarea-field" id="order-description" placeholder="Дайте описание и объем работ"></textarea>
-        </div>
-        
-        <div class="order-section">
-            <div class="section-title">Адрес оказания услуг</div>
-            <input type="text" class="input-field" id="order-address" placeholder="Введите адрес">
-        </div>
-        
-        <button class="next-button" id="next-button">Далее</button>
+        <button class="add-contact-btn" id="add-contact-btn">
+            <i class="fas fa-plus"></i> Добавить еще контакт
+        </button>
     </div>
+    
+    <button class="next-button hidden" id="next-button">Далее</button>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -257,13 +389,63 @@
                 console.log('User ID:', userId);
             }
             
+            // Элементы DOM
+            const backButton = document.getElementById('back-button');
+            const helpButton = document.getElementById('help-button');
+            const nextButton = document.getElementById('next-button');
+            const workerCards = document.querySelectorAll('.worker-card');
+            
+            // Секции формы
+            const workerTypeSection = document.getElementById('worker-type-section');
+            const datetimeSection = document.getElementById('datetime-section');
+            const workersSection = document.getElementById('workers-section');
+            const hoursSection = document.getElementById('hours-section');
+            const descriptionSection = document.getElementById('description-section');
+            const addressSection = document.getElementById('address-section');
+            const contactsSection = document.getElementById('contacts-section');
+            
+            // Переменные состояния
+            let selectedWorkerType = null;
+            let workersCount = 1;
+            let hoursCount = 1;
+            
             // Обработчик кнопки назад
-            document.getElementById('back-button').addEventListener('click', function() {
+            backButton.addEventListener('click', function() {
                 window.location.href = 'index.html';
             });
             
+            // Обработчик кнопки помощи
+            helpButton.addEventListener('click', function() {
+                tg.showAlert('Здесь вы можете создать новый заказ. Выберите тип рабочего и заполните все необходимые данные.');
+            });
+            
+            // Выбор типа рабочего
+            workerCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Снимаем выделение со всех карточек
+                    workerCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Выделяем выбранную карточку
+                    this.classList.add('selected');
+                    
+                    // Сохраняем выбранный тип
+                    selectedWorkerType = this.getAttribute('data-type');
+                    
+                    // Показываем следующие секции
+                    datetimeSection.classList.remove('hidden');
+                    workersSection.classList.remove('hidden');
+                    hoursSection.classList.remove('hidden');
+                    descriptionSection.classList.remove('hidden');
+                    addressSection.classList.remove('hidden');
+                    contactsSection.classList.remove('hidden');
+                    nextButton.classList.remove('hidden');
+                    
+                    // Прокручиваем к следующей секции
+                    datetimeSection.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
             // Управление счетчиком исполнителей
-            let workersCount = 1;
             const workersElement = document.getElementById('workers-count');
             
             document.getElementById('increase-workers').addEventListener('click', function() {
@@ -278,32 +460,131 @@
                 }
             });
             
+            // Управление счетчиком часов
+            const hoursElement = document.getElementById('hours-count');
+            
+            document.getElementById('increase-hours').addEventListener('click', function() {
+                hoursCount++;
+                hoursElement.textContent = hoursCount;
+            });
+            
+            document.getElementById('decrease-hours').addEventListener('click', function() {
+                if (hoursCount > 1) {
+                    hoursCount--;
+                    hoursElement.textContent = hoursCount;
+                }
+            });
+            
+            // Установка минимальной даты (текущий день)
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().slice(0, 16);
+            document.getElementById('order-datetime').min = minDate;
+            
+            // Добавление контактов
+            document.getElementById('add-contact-btn').addEventListener('click', function() {
+                const contactsContainer = document.getElementById('contacts-container');
+                const contactRow = document.createElement('div');
+                contactRow.className = 'contact-row';
+                contactRow.innerHTML = `
+                    <input type="text" class="contact-input" placeholder="Имя">
+                    <input type="tel" class="contact-input" placeholder="Номер телефона">
+                    <div class="contact-actions">
+                        <button class="contact-action-btn reset-btn" title="Сбросить">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button class="contact-action-btn delete-btn" title="Удалить" style="background-color: #ffebee; color: #d32f2f;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Обработчик кнопки сброса
+                const resetBtn = contactRow.querySelector('.reset-btn');
+                resetBtn.addEventListener('click', function() {
+                    const inputs = contactRow.querySelectorAll('.contact-input');
+                    inputs.forEach(input => input.value = '');
+                });
+                
+                // Обработчик кнопки удаления
+                const deleteBtn = contactRow.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', function() {
+                    contactRow.remove();
+                });
+                
+                contactsContainer.appendChild(contactRow);
+            });
+            
             // Обработчик кнопки "Далее"
-            document.getElementById('next-button').addEventListener('click', function() {
-                const hours = document.getElementById('hours-needed').value;
+            nextButton.addEventListener('click', function() {
+                const datetime = document.getElementById('order-datetime').value;
                 const title = document.getElementById('order-title').value;
                 const description = document.getElementById('order-description').value;
                 const address = document.getElementById('order-address').value;
+                const instructions = document.getElementById('address-instructions').value;
+                
+                // Сбор контактов
+                const contacts = [];
+                const contactRows = document.querySelectorAll('.contact-row');
+                contactRows.forEach(row => {
+                    const inputs = row.querySelectorAll('.contact-input');
+                    if (inputs[0].value && inputs[1].value) {
+                        contacts.push({
+                            name: inputs[0].value,
+                            phone: inputs[1].value
+                        });
+                    }
+                });
                 
                 // Простая валидация
-                if (!title || !description || !address || !hours) {
-                    tg.showAlert('Пожалуйста, заполните все обязательные поля');
+                if (!selectedWorkerType) {
+                    tg.showAlert('Пожалуйста, выберите тип рабочего');
+                    workerTypeSection.scrollIntoView({ behavior: 'smooth' });
                     return;
                 }
                 
-                // Сохраняем данные заказа (можно сохранить в localStorage или отправить на сервер)
+                if (!datetime) {
+                    tg.showAlert('Пожалуйста, укажите дату и время выполнения заказа');
+                    datetimeSection.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                
+                if (!title || !description) {
+                    tg.showAlert('Пожалуйста, заполните описание заказа');
+                    descriptionSection.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                
+                if (!address) {
+                    tg.showAlert('Пожалуйста, укажите адрес оказания услуг');
+                    addressSection.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                
+                if (contacts.length === 0) {
+                    tg.showAlert('Пожалуйста, укажите хотя бы один контакт для связи');
+                    contactsSection.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                
+                // Сохраняем данные заказа
                 const orderData = {
+                    workerType: selectedWorkerType,
                     workers: workersCount,
-                    hours: hours,
+                    hours: hoursCount,
+                    datetime: datetime,
                     title: title,
                     description: description,
                     address: address,
+                    instructions: instructions,
+                    contacts: contacts,
                     userId: userId
                 };
                 
                 localStorage.setItem('currentOrder', JSON.stringify(orderData));
                 
-                tg.showAlert('Заказ сохранен! В будущем здесь будет переход к следующему шагу.');
+                tg.showAlert('Заказ успешно создан! В будущем здесь будет переход к подтверждению заказа.');
             });
             
             // Разворачиваем приложение на весь экран
