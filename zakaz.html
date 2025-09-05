@@ -219,6 +219,8 @@
             border-radius: 8px;
             font-size: 16px;
             margin-bottom: 12px;
+            background-color: #f8f8f8;
+            cursor: pointer;
         }
         
         .contact-container {
@@ -315,7 +317,7 @@
             background-color: white;
             border-radius: 12px;
             padding: 20px;
-            width: 80%;
+            width: 90%;
             max-width: 400px;
             position: relative;
         }
@@ -334,6 +336,7 @@
             font-weight: 600;
             font-size: 18px;
             margin-bottom: 12px;
+            text-align: center;
         }
         
         .modal-content {
@@ -343,6 +346,137 @@
         
         .form-container {
             margin-top: 64px;
+        }
+        
+        .calendar-container {
+            padding: 10px 0;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .calendar-nav {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .calendar-month {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .calendar-weekdays div {
+            padding: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        
+        .calendar-day {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .calendar-day:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .calendar-day.selected {
+            background-color: #FF8C00;
+            color: white;
+        }
+        
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+        
+        .calendar-day.today {
+            border: 1px solid #FF8C00;
+        }
+        
+        .time-selector {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .time-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .time-slot {
+            padding: 8px 5px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .time-slot.selected {
+            background-color: #FF8C00;
+            color: white;
+        }
+        
+        .save-date-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .input-container {
+            margin-bottom: 16px;
+        }
+        
+        .input-label {
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #555;
         }
     </style>
 </head>
@@ -379,7 +513,7 @@
                 <i class="far fa-calendar-alt"></i>
                 <span>Дата и время выполнения</span>
             </div>
-            <input type="datetime-local" class="datetime-input" id="order-datetime">
+            <input type="text" class="datetime-input" id="order-datetime" readonly placeholder="Выберите дату и время">
         </div>
         
         <!-- Количество исполнителей (скрыто изначально) -->
@@ -447,11 +581,11 @@
                 <span>С кем связаться по прибытию</span>
             </div>
             <div id="contacts-container">
-                <div class="contact-container">
+                <div class="contact-container" data-contact-id="1">
                     <input type="text" class="contact-input" placeholder="Имя">
                     <input type="tel" class="contact-input" placeholder="Номер телефона">
                     <div class="contact-actions">
-                        <button class="contact-action-btn reset-btn">
+                        <button class="contact-action-btn reset-btn" onclick="resetContactInputs(this)">
                             <i class="fas fa-times"></i> Сбросить
                         </button>
                     </div>
@@ -474,6 +608,58 @@
             <div class="modal-title">Информация</div>
             <div class="modal-content">
                 Здесь вы можете создать новый заказ. Выберите тип рабочего и заполните все необходимые данные.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно календаря -->
+    <div class="modal-overlay" id="calendar-modal">
+        <div class="modal">
+            <button class="modal-close" id="calendar-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Выберите дату и время</div>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button class="calendar-nav" id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                    <div class="calendar-month" id="current-month">Май 2023</div>
+                    <button class="calendar-nav" id="next-month"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="calendar-weekdays">
+                    <div>Пн</div>
+                    <div>Вт</div>
+                    <div>Ср</div>
+                    <div>Чт</div>
+                    <div>Пт</div>
+                    <div>Сб</div>
+                    <div>Вс</div>
+                </div>
+                
+                <div class="calendar-days" id="calendar-days">
+                    <!-- Days will be generated by JavaScript -->
+                </div>
+                
+                <div class="time-selector">
+                    <div class="time-title">Выберите время</div>
+                    <div class="time-slots" id="time-slots">
+                        <div class="time-slot" data-time="09:00">09:00</div>
+                        <div class="time-slot" data-time="10:00">10:00</div>
+                        <div class="time-slot" data-time="11:00">11:00</div>
+                        <div class="time-slot" data-time="12:00">12:00</div>
+                        <div class="time-slot" data-time="13:00">13:00</div>
+                        <div class="time-slot" data-time="14:00">14:00</div>
+                        <div class="time-slot" data-time="15:00">15:00</div>
+                        <div class="time-slot" data-time="16:00">16:00</div>
+                        <div class="time-slot" data-time="17:00">17:00</div>
+                        <div class="time-slot" data-time="18:00">18:00</div>
+                        <div class="time-slot" data-time="19:00">19:00</div>
+                        <div class="time-slot" data-time="20:00">20:00</div>
+                    </div>
+                </div>
+                
+                <button class="save-date-btn" id="save-date">Сохранить</button>
             </div>
         </div>
     </div>
@@ -507,6 +693,10 @@
             const workerCard = document.querySelector('.worker-card');
             const helpModal = document.getElementById('help-modal');
             const modalClose = document.getElementById('modal-close');
+            const calendarModal = document.getElementById('calendar-modal');
+            const calendarClose = document.getElementById('calendar-close');
+            const datetimeInput = document.getElementById('order-datetime');
+            const saveDateBtn = document.getElementById('save-date');
             
             // Секции формы
             const workerTypeSection = document.getElementById('worker-type-section');
@@ -521,6 +711,11 @@
             let selectedWorkerType = null;
             let workersCount = 1;
             let hoursCount = 1;
+            let selectedDate = null;
+            let selectedTime = null;
+            let currentMonth = new Date().getMonth();
+            let currentYear = new Date().getFullYear();
+            let contactCounter = 1;
             
             // Обработчик кнопки назад
             backButton.addEventListener('click', function() {
@@ -532,15 +727,33 @@
                 helpModal.style.display = 'flex';
             });
             
-            // Закрытие модального окна
+            // Закрытие модального окна помощи
             modalClose.addEventListener('click', function() {
                 helpModal.style.display = 'none';
             });
             
-            // Закрытие модального окна при клике вне его
+            // Закрытие модального окна помощи при клике вне его
             helpModal.addEventListener('click', function(e) {
                 if (e.target === helpModal) {
                     helpModal.style.display = 'none';
+                }
+            });
+            
+            // Открытие календаря при клике на поле даты
+            datetimeInput.addEventListener('click', function() {
+                generateCalendar(currentMonth, currentYear);
+                calendarModal.style.display = 'flex';
+            });
+            
+            // Закрытие модального окна календаря
+            calendarClose.addEventListener('click', function() {
+                calendarModal.style.display = 'none';
+            });
+            
+            // Закрытие модального окна календаря при клике вне его
+            calendarModal.addEventListener('click', function(e) {
+                if (e.target === calendarModal) {
+                    calendarModal.style.display = 'none';
                 }
             });
             
@@ -596,50 +809,174 @@
                 }
             });
             
-            // Установка минимальной даты (текущий день)
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const minDate = tomorrow.toISOString().slice(0, 16);
-            document.getElementById('order-datetime').min = minDate;
-            
             // Добавление контактов
             document.getElementById('add-contact-btn').addEventListener('click', function() {
                 const contactsContainer = document.getElementById('contacts-container');
+                contactCounter++;
+                
                 const contactDiv = document.createElement('div');
                 contactDiv.className = 'contact-container';
+                contactDiv.setAttribute('data-contact-id', contactCounter);
                 contactDiv.innerHTML = `
                     <input type="text" class="contact-input" placeholder="Имя">
                     <input type="tel" class="contact-input" placeholder="Номер телефона">
                     <div class="contact-actions">
-                        <button class="contact-action-btn reset-btn">
+                        <button class="contact-action-btn reset-btn" onclick="resetContactInputs(this)">
                             <i class="fas fa-times"></i> Сбросить
                         </button>
-                        <button class="contact-action-btn delete-btn">
+                        <button class="contact-action-btn delete-btn" onclick="deleteContact(this)">
                             <i class="fas fa-trash"></i> Удалить
                         </button>
                     </div>
                 `;
                 
-                // Обработчик кнопки сброса
-                const resetBtn = contactDiv.querySelector('.reset-btn');
-                resetBtn.addEventListener('click', function() {
-                    const inputs = contactDiv.querySelectorAll('.contact-input');
-                    inputs.forEach(input => input.value = '');
-                });
-                
-                // Обработчик кнопки удаления
-                const deleteBtn = contactDiv.querySelector('.delete-btn');
-                deleteBtn.addEventListener('click', function() {
-                    contactDiv.remove();
-                });
-                
                 contactsContainer.appendChild(contactDiv);
+                
+                // Добавляем кнопку удаления к первому контакту, если это второй контакт
+                if (contactCounter === 2) {
+                    const firstContact = document.querySelector('[data-contact-id="1"]');
+                    const contactActions = firstContact.querySelector('.contact-actions');
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'contact-action-btn delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Удалить';
+                    deleteBtn.onclick = function() { deleteContact(this); };
+                    
+                    contactActions.appendChild(deleteBtn);
+                }
             });
+            
+            // Глобальные функции для работы с контактами
+            window.resetContactInputs = function(button) {
+                const contactContainer = button.closest('.contact-container');
+                const inputs = contactContainer.querySelectorAll('.contact-input');
+                inputs.forEach(input => input.value = '');
+            };
+            
+            window.deleteContact = function(button) {
+                const contactContainer = button.closest('.contact-container');
+                const contactId = contactContainer.getAttribute('data-contact-id');
+                
+                // Нельзя удалить единственный контакт
+                const allContacts = document.querySelectorAll('.contact-container');
+                if (allContacts.length <= 1) return;
+                
+                contactContainer.remove();
+                
+                // Если удалили не первый контакт, и остался только один - убираем кнопку удаления у первого
+                const remainingContacts = document.querySelectorAll('.contact-container');
+                if (remainingContacts.length === 1) {
+                    const firstContact = document.querySelector('[data-contact-id="1"]');
+                    const deleteBtn = firstContact.querySelector('.delete-btn');
+                    if (deleteBtn) deleteBtn.remove();
+                }
+            };
+            
+            // Навигация по календарю
+            document.getElementById('prev-month').addEventListener('click', function() {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+            
+            document.getElementById('next-month').addEventListener('click', function() {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+            
+            // Сохранение выбранной даты и времени
+            saveDateBtn.addEventListener('click', function() {
+                if (selectedDate && selectedTime) {
+                    const date = new Date(selectedDate);
+                    const formattedDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()} ${selectedTime}`;
+                    datetimeInput.value = formattedDate;
+                    calendarModal.style.display = 'none';
+                } else {
+                    alert('Пожалуйста, выберите дату и время');
+                }
+            });
+            
+            // Генерация календаря
+            function generateCalendar(month, year) {
+                const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+                
+                document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
+                
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                // Adjust for Monday as first day of week
+                let firstDayIndex = firstDay === 0 ? 6 : firstDay - 1;
+                
+                const calendarDays = document.getElementById('calendar-days');
+                calendarDays.innerHTML = '';
+                
+                // Previous month days
+                const prevMonthDays = new Date(year, month, 0).getDate();
+                for (let i = firstDayIndex; i > 0; i--) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day other-month';
+                    dayElement.textContent = prevMonthDays - i + 1;
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                // Current month days
+                const today = new Date();
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = i;
+                    
+                    // Check if today
+                    if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        dayElement.classList.add('today');
+                    }
+                    
+                    // Check if selected
+                    if (selectedDate && i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
+                        dayElement.classList.add('selected');
+                    }
+                    
+                    dayElement.addEventListener('click', function() {
+                        document.querySelectorAll('.calendar-day').forEach(day => day.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedDate = new Date(year, month, i);
+                    });
+                    
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                // Next month days
+                const daysNeeded = 42 - (firstDayIndex + daysInMonth); // 6 rows x 7 days
+                for (let i = 1; i <= daysNeeded; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day other-month';
+                    dayElement.textContent = i;
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                // Time slots
+                const timeSlots = document.querySelectorAll('.time-slot');
+                timeSlots.forEach(slot => {
+                    slot.addEventListener('click', function() {
+                        timeSlots.forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedTime = this.getAttribute('data-time');
+                    });
+                });
+            }
             
             // Обработчик кнопки "Далее"
             nextButton.addEventListener('click', function() {
-                const datetime = document.getElementById('order-datetime').value;
+                const datetime = datetimeInput.value;
                 const title = document.getElementById('order-title').value;
                 const description = document.getElementById('order-description').value;
                 const address = document.getElementById('order-address').value;
@@ -705,22 +1042,6 @@
             
             // Разворачиваем приложение на весь экран
             tg.expand();
-            
-            // Добавляем стили для input-container и input-label
-            const style = document.createElement('style');
-            style.textContent = `
-                .input-container {
-                    margin-bottom: 16px;
-                }
-                
-                .input-label {
-                    font-weight: 500;
-                    margin-bottom: 6px;
-                    font-size: 14px;
-                    color: #555;
-                }
-            `;
-            document.head.appendChild(style);
         });
     </script>
 </body>
