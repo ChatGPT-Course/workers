@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новый заказ | Персонал 96</title>
+    <title>Персонал 96 | Аренда рабочих</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -20,7 +19,7 @@
             color: #000000;
             max-width: 100%;
             overflow-x: hidden;
-            padding: 8px 8px 100px 8px;
+            padding: 8px 8px 80px 8px;
         }
         
         .header {
@@ -30,1038 +29,403 @@
             padding: 12px 16px;
             height: 56px;
             background-color: #e0e0e0;
-            border-radius: 10px;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            z-index: 101;
+        }
+        
+        .app-title {
+            font-weight: 600;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.2;
+        }
+        
+        .app-main-title {
+            font-size: 18px;
+        }
+        
+        .app-sub-title {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        
+        .menu-button {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            background: none;
+            border: none;
+        }
+        
+        .menu-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-line:nth-child(1) {
+            top: 6px;
+        }
+        
+        .menu-line:nth-child(2) {
+            top: 12px;
+        }
+        
+        .menu-line:nth-child(3) {
+            top: 18px;
+        }
+        
+        .menu-button.close .menu-line:nth-child(1) {
+            transform: rotate(45deg);
+            top: 12px;
+        }
+        
+        .menu-button.close .menu-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-button.close .menu-line:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 12px;
+        }
+        
+        .menu-overlay {
             position: fixed;
-            top: 8px;
+            top: 56px;
             left: 8px;
             right: 8px;
+            background-color: #e0e0e0;
+            border-radius: 0 0 10px 10px;
+            display: none;
             z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-height: 0;
+            transition: max-height 0.5s ease;
+            overflow: hidden;
         }
         
-        .header-title {
-            font-weight: 600;
-            font-size: 18px;
-            flex: 1;
-            text-align: center;
+        .menu-overlay.active {
+            display: block;
+            max-height: 500px;
         }
         
-        .back-button, .help-button {
-            width: 36px;
-            height: 36px;
+        .divider {
+            height: 1px;
+            background-color: #888;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.2s;
+        }
+        
+        .menu-overlay.active .divider {
+            opacity: 1;
+        }
+        
+        .profile-card {
+            background-color: #e0e0e0;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            margin-top: 1px;
+        }
+        
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background-color: #d0d0d0;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            overflow: hidden;
+            margin-right: 12px;
+            flex-shrink: 0;
         }
         
-        .section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
-        .section-title {
-            font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .section-title i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .worker-cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .worker-card {
+        .profile-info {
             flex: 1;
-            min-width: 140px;
-            background-color: #f8f8f8;
-            border-radius: 10px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
         }
         
-        .worker-card.selected {
-            border-color: #FF8C00;
-            background-color: #fff8f0;
-        }
-        
-        .worker-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #888;
-            transition: all 0.3s ease;
-        }
-        
-        .worker-card.selected .worker-icon {
-            color: #FF8C00;
-        }
-        
-        .worker-name {
+        .profile-name {
             font-weight: 500;
-            font-size: 14px;
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 4px;
         }
         
-        .checkmark {
+        .profile-name span {
+            color: #000;
+            font-weight: normal;
+        }
+        
+        .profile-id {
+            color: #000;
+            font-size: 16px;
+        }
+        
+        .menu-item {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s ease;
+        }
+        
+        .menu-item:active:not(.disabled) {
+            transform: scale(0.98);
+        }
+        
+        .menu-item.disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-arrow {
+            color: #888;
+            font-size: 16px;
+        }
+        
+        .menu-item-wave {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.05);
+            transition: width 0.5s ease, opacity 0.5s ease 0.5s;
+            z-index: 0;
+            opacity: 1;
         }
         
-        .worker-card.selected .checkmark {
-            background-color: #FF8C00;
-            border-color: #FF8C00;
-        }
-        
-        .worker-card.selected .checkmark::after {
-            content: "✓";
-            color: white;
-            font-size: 12px;
-        }
-        
-        .input-field {
+        .menu-item-wave.animate {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 12px;
+            opacity: 0;
         }
         
-        .input-field:focus {
-            outline: none;
-            border-color: #FF8C00;
-        }
-        
-        .textarea-field {
+        .menu-item-content {
+            position: relative;
+            z-index: 1;
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 12px;
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .counter-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            background-color: #f8f8f8;
-            border-radius: 50px;
-            padding: 8px;
-            width: 200px;
-            margin: 0 auto 16px;
+            justify-content: space-between;
         }
         
-        .counter-button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        
-        .counter-button:active {
-            background-color: #FF8C00;
-            color: white;
-            transform: scale(0.95);
-        }
-        
-        .counter-value {
-            margin: 0 16px;
-            font-size: 18px;
-            font-weight: 600;
-            min-width: 30px;
-            text-align: center;
-        }
-        
-        .datetime-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 12px;
-            background-color: #f8f8f8;
-            cursor: pointer;
-        }
-        
-        .contact-container {
-            margin-bottom: 16px;
-            padding: 12px;
-            background-color: #f8f8f8;
-            border-radius: 8px;
-        }
-        
-        .contact-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        
-        .contact-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .contact-action-btn {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: none;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .reset-btn {
-            background-color: #ffebee;
-            color: #d32f2f;
-        }
-        
-        .delete-btn {
-            background-color: #ffebee;
-            color: #d32f2f;
-        }
-        
-        .add-contact-btn {
-            background-color: #e0e0e0;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            margin-bottom: 12px;
-        }
-        
-        .next-button {
+        .buttons-container {
             position: fixed;
             bottom: 16px;
             left: 8px;
             right: 8px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .order-button {
+            flex: 1.5;
             background-color: #FF8C00;
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 16px;
+            padding: 10px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            z-index: 99;
+            outline: none;
+            line-height: 1.2;
         }
         
-        .hidden {
-            display: none;
-        }
-        
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            display: none;
-            padding: 20px; /* Добавлены отступы */
-        }
-        
-        .modal {
-            background-color: white;
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-            max-height: 90vh; /* Ограничение по высоте */
-            overflow-y: auto; /* Прокрутка если контент не помещается */
-        }
-        
-        .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        
-        .modal-title {
-            font-weight: 600;
-            font-size: 18px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-        
-        .modal-content {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-        
-        .form-container {
-            margin-top: 64px;
-        }
-        
-        .calendar-container {
-            padding: 10px 0;
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .calendar-nav {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        
-        .calendar-month {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        
-        .calendar-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-weight: 500;
-            margin-bottom: 8px;
-            gap: 4px;
-        }
-        
-        .calendar-weekdays div {
-            padding: 5px;
-            font-size: 14px;
-            color: #555;
-        }
-        
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-        
-        .calendar-day {
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .calendar-day:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .calendar-day.selected {
-            background-color: #FF8C00;
-            color: white;
-        }
-        
-        .calendar-day.other-month {
-            color: #ccc;
-        }
-        
-        .calendar-day.today {
-            border: 1px solid #FF8C00;
-        }
-        
-        .time-selector {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-        
-        .time-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-        }
-        
-        .time-slot {
-            padding: 8px 5px;
-            text-align: center;
-            border-radius: 8px;
-            background-color: #f0f0f0;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        
-        .time-slot.selected {
-            background-color: #FF8C00;
-            color: white;
-        }
-        
-        .save-date-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #FF8C00;
+        .calculate-button {
+            flex: 1;
+            background-color: #8bc34a;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
+            padding: 10px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            margin-top: 15px;
-        }
-        
-        .input-container {
-            margin-bottom: 16px;
-        }
-        
-        .input-label {
-            font-weight: 500;
-            margin-bottom: 6px;
-            font-size: 14px;
-            color: #555;
-        }
-        
-        .selected-date-info {
             text-align: center;
-            margin: 10px 0;
-            font-size: 14px;
-            color: #FF8C00;
-            font-weight: 500;
+            outline: none;
+            line-height: 1.2;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <button class="back-button" id="back-button">
-            <i class="fas fa-arrow-left"></i>
+        <div class="app-title">
+            <span class="app-main-title">Персонал 96</span>
+            <span class="app-sub-title">| Аренда рабочих</span>
+        </div>
+        <button class="menu-button" id="menu-button">
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
         </button>
-        <div class="header-title">Новый заказ</div>
-        <button class="help-button" id="help-button">
-            <i class="fas fa-question"></i>
-        </button>
     </div>
     
-    <div class="form-container">
-        <!-- Выбор типа рабочего -->
-        <div class="section" id="worker-type-section">
-            <div class="section-title">
-                <i class="fas fa-hard-hat"></i>
-                <span>Выберите тип рабочего</span>
+    <div class="menu-overlay" id="menu-overlay">
+        <div class="divider"></div>
+        <div class="profile-card" id="profile-card">
+            <div class="profile-avatar" id="profile-avatar">
+                <!-- Аватар будет загружен через JS -->
             </div>
-            <div class="worker-cards">
-                <div class="worker-card" data-type="general">
-                    <div class="checkmark"></div>
-                    <div class="worker-icon"><i class="fas fa-tools"></i></div>
-                    <div class="worker-name">Разнорабочий</div>
-                </div>
+            <div class="profile-info">
+                <div class="profile-name"><span id="profile-name"></span> <span id="profile-username"></span></div>
+                <div class="profile-id" id="profile-id"></div>
             </div>
         </div>
         
-        <!-- Дата и время (скрыто изначально) -->
-        <div class="section hidden" id="datetime-section">
-            <div class="section-title">
-                <i class="far fa-calendar-alt"></i>
-                <span>Дата и время выполнения</span>
-            </div>
-            <input type="text" class="datetime-input" id="order-datetime" readonly placeholder="Выберите дату и время">
-        </div>
-        
-        <!-- Количество исполнителей (скрыто изначально) -->
-        <div class="section hidden" id="workers-section">
-            <div class="section-title">
-                <i class="fas fa-users"></i>
-                <span>Количество исполнителей</span>
-            </div>
-            <div class="counter-container">
-                <button class="counter-button" id="decrease-workers">-</button>
-                <span class="counter-value" id="workers-count">1</span>
-                <button class="counter-button" id="increase-workers">+</button>
+        <div class="menu-item" id="profile-menu-item">
+            <div class="menu-item-wave" id="profile-wave"></div>
+            <div class="menu-item-content">
+                В профиль
+                <span class="menu-arrow">></span>
             </div>
         </div>
-        
-        <!-- Часы работы (скрыто изначально) -->
-        <div class="section hidden" id="hours-section">
-            <div class="section-title">
-                <i class="far fa-clock"></i>
-                <span>На сколько часов нужно?</span>
-            </div>
-            <div class="counter-container">
-                <button class="counter-button" id="decrease-hours">-</button>
-                <span class="counter-value" id="hours-count">1</span>
-                <button class="counter-button" id="increase-hours">+</button>
+        <div class="menu-item" id="history-menu-item">
+            <div class="menu-item-wave" id="history-wave"></div>
+            <div class="menu-item-content">
+                История заказов
+                <span class="menu-arrow">></span>
             </div>
         </div>
-        
-        <!-- Описание заказа (скрыто изначально) -->
-        <div class="section hidden" id="description-section">
-            <div class="section-title">
-                <i class="far fa-edit"></i>
-                <span>Опишите заказ</span>
-            </div>
-            <div class="input-container">
-                <div class="input-label">Дайте название заказа</div>
-                <input type="text" class="input-field" id="order-title" placeholder="Например: раскидать дрова">
-            </div>
-            <div class="input-container">
-                <div class="input-label">Что нужно делать?</div>
-                <textarea class="textarea-field" id="order-description" placeholder="Например: Дайте описание объем работ"></textarea>
+        <div class="menu-item" id="support-menu-item">
+            <div class="menu-item-wave" id="support-wave"></div>
+            <div class="menu-item-content">
+                Поддержка
+                <span class="menu-arrow">></span>
             </div>
         </div>
-        
-        <!-- Адрес (скрыто изначально) -->
-        <div class="section hidden" id="address-section">
-            <div class="section-title">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Адрес оказания услуг</span>
-            </div>
-            <div class="input-container">
-                <div class="input-label">Адрес заказа</div>
-                <input type="text" class="input-field" id="order-address" placeholder="Введите адрес">
-            </div>
-            <div class="input-container">
-                <div class="input-label">Как добраться до адреса</div>
-                <input type="text" class="input-field" id="address-instructions" placeholder="Дополнительные инструкции">
-            </div>
-        </div>
-        
-        <!-- Контакты (скрыто изначально) -->
-        <div class="section hidden" id="contacts-section">
-            <div class="section-title">
-                <i class="fas fa-address-book"></i>
-                <span>С кем связаться по прибытию</span>
-            </div>
-            <div id="contacts-container">
-                <div class="contact-container" data-contact-id="1">
-                    <input type="text" class="contact-input" placeholder="Имя">
-                    <input type="tel" class="contact-input" placeholder="Номер телефона">
-                    <div class="contact-actions">
-                        <button class="contact-action-btn reset-btn" onclick="resetContactInputs(this)">
-                            <i class="fas fa-times"></i> Сбросить
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <button class="add-contact-btn" id="add-contact-btn">
-                <i class="fas fa-plus"></i> Добавить еще контакт
-            </button>
-        </div>
-    </div>
-    
-    <button class="next-button hidden" id="next-button">Далее</button>
-    
-    <!-- Модальное окно помощи -->
-    <div class="modal-overlay" id="help-modal">
-        <div class="modal">
-            <button class="modal-close" id="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-title">Информация</div>
-            <div class="modal-content">
-                Здесь вы можете создать новый заказ. Выберите тип рабочего и заполните все необходимые данные.
+        <div class="menu-item" id="about-menu-item">
+            <div class="menu-item-wave" id="about-wave"></div>
+            <div class="menu-item-content">
+                О нас
+                <span class="menu-arrow">></span>
             </div>
         </div>
     </div>
     
-    <!-- Модальное окно календаря -->
-    <div class="modal-overlay" id="calendar-modal">
-        <div class="modal">
-            <button class="modal-close" id="calendar-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-title">Выберите дату и время</div>
-            
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <button class="calendar-nav" id="prev-month"><i class="fas fa-chevron-left"></i></button>
-                    <div class="calendar-month" id="current-month">Май 2023</div>
-                    <button class="calendar-nav" id="next-month"><i class="fas fa-chevron-right"></i></button>
-                </div>
-                
-                <div class="calendar-weekdays">
-                    <div>Пн</div>
-                    <div>Вт</div>
-                    <div>Ср</div>
-                    <div>Чт</div>
-                    <div>Пт</div>
-                    <div>Сб</div>
-                    <div>Вс</div>
-                </div>
-                
-                <div class="calendar-days" id="calendar-days">
-                    <!-- Days will be generated by JavaScript -->
-                </div>
-                
-                <div class="selected-date-info" id="selected-date-info"></div>
-                
-                <div class="time-selector">
-                    <div class="time-title">Выберите время</div>
-                    <div class="time-slots" id="time-slots">
-                        <div class="time-slot" data-time="09:00">09:00</div>
-                        <div class="time-slot" data-time="10:00">10:00</div>
-                        <div class="time-slot" data-time="11:00">11:00</div>
-                        <div class="time-slot" data-time="12:00">12:00</div>
-                        <div class="time-slot" data-time="13:00">13:00</div>
-                        <div class="time-slot" data-time="14:00">14:00</div>
-                        <div class="time-slot" data-time="15:00">15:00</div>
-                        <div class="time-slot" data-time="16:00">16:00</div>
-                        <div class="time-slot" data-time="17:00">17:00</div>
-                        <div class="time-slot" data-time="18:00">18:00</div>
-                        <div class="time-slot" data-time="19:00">19:00</div>
-                        <div class="time-slot" data-time="20:00">20:00</div>
-                    </div>
-                </div>
-                
-                <button class="save-date-btn" id="save-date">Сохранить</button>
-            </div>
-        </div>
+    <div class="buttons-container">
+        <button class="order-button" id="order-button">Создать<br>заказ</button>
+        <button class="calculate-button" id="calculate-button">Рассчитать<br>стоимость</button>
     </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
+            const menuButton = document.getElementById('menu-button');
+            const menuOverlay = document.getElementById('menu-overlay');
             
-            // Получаем ID пользователя из cookie
-            function getUserId() {
-                const cookies = document.cookie.split(';');
-                for (let cookie of cookies) {
-                    const [name, value] = cookie.trim().split('=');
-                    if (name === 'tg_user_id') {
-                        return value;
-                    }
-                }
-                return null;
+            // Получаем данные пользователя
+            const initData = tg.initDataUnsafe;
+            const user = initData.user || {};
+            
+            // Сохраняем ID пользователя в cookie
+            if (user.id) {
+                document.cookie = `tg_user_id=${user.id}; path=/; max-age=31536000`; // Сохраняем на 1 год
             }
             
-            // Сохраняем ID пользователя
-            const userId = getUserId();
-            if (userId) {
-                console.log('User ID:', userId);
+            // Устанавливаем данные профиля в меню
+            const profileName = document.getElementById('profile-name');
+            const profileUsername = document.getElementById('profile-username');
+            const profileId = document.getElementById('profile-id');
+            const profileAvatar = document.getElementById('profile-avatar');
+            
+            if (user.first_name || user.last_name) {
+                profileName.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim();
             }
             
-            // Элементы DOM
-            const backButton = document.getElementById('back-button');
-            const helpButton = document.getElementById('help-button');
-            const nextButton = document.getElementById('next-button');
-            const workerCard = document.querySelector('.worker-card');
-            const helpModal = document.getElementById('help-modal');
-            const modalClose = document.getElementById('modal-close');
-            const calendarModal = document.getElementById('calendar-modal');
-            const calendarClose = document.getElementById('calendar-close');
-            const datetimeInput = document.getElementById('order-datetime');
-            const saveDateBtn = document.getElementById('save-date');
-            const selectedDateInfo = document.getElementById('selected-date-info');
+            if (user.username) {
+                profileUsername.textContent = `(@${user.username})`;
+            } else {
+                profileUsername.textContent = '';
+            }
             
-            // Секции формы
-            const workerTypeSection = document.getElementById('worker-type-section');
-            const datetimeSection = document.getElementById('datetime-section');
-            const workersSection = document.getElementById('workers-section');
-            const hoursSection = document.getElementById('hours-section');
-            const descriptionSection = document.getElementById('description-section');
-            const addressSection = document.getElementById('address-section');
-            const contactsSection = document.getElementById('contacts-section');
+            if (user.id) {
+                profileId.textContent = `ID: ${user.id}`;
+            }
             
-            // Переменные состояния
-            let selectedWorkerType = null;
-            let workersCount = 1;
-            let hoursCount = 1;
-            let selectedDate = null;
-            let selectedTime = null;
-            let currentMonth = new Date().getMonth();
-            let currentYear = new Date().getFullYear();
-            let contactCounter = 1;
+            if (user.photo_url) {
+                profileAvatar.innerHTML = `<img src="${user.photo_url}" alt="Аватар">`;
+            } else if (user.first_name) {
+                profileAvatar.textContent = user.first_name.charAt(0).toUpperCase();
+            }
             
-            // Обработчик кнопки назад
-            backButton.addEventListener('click', function() {
-                window.location.href = 'index.html';
-            });
-            
-            // Обработчик кнопки помощи
-            helpButton.addEventListener('click', function() {
-                helpModal.style.display = 'flex';
-            });
-            
-            // Закрытие модального окна помощи
-            modalClose.addEventListener('click', function() {
-                helpModal.style.display = 'none';
-            });
-            
-            // Закрытие модального окна помощи при клике вне его
-            helpModal.addEventListener('click', function(e) {
-                if (e.target === helpModal) {
-                    helpModal.style.display = 'none';
-                }
-            });
-            
-            // Открытие календаря при клике на поле даты
-            datetimeInput.addEventListener('click', function() {
-                generateCalendar(currentMonth, currentYear);
-                calendarModal.style.display = 'flex';
-            });
-            
-            // Закрытие модального окна календаря
-            calendarClose.addEventListener('click', function() {
-                calendarModal.style.display = 'none';
-            });
-            
-            // Закрытие модального окна календаря при клике вне его
-            calendarModal.addEventListener('click', function(e) {
-                if (e.target === calendarModal) {
-                    calendarModal.style.display = 'none';
-                }
-            });
-            
-            // Выбор типа рабочего
-            workerCard.addEventListener('click', function() {
-                // Выделяем выбранную карточку
-                this.classList.add('selected');
+            // Обработчик кнопки меню
+            menuButton.addEventListener('click', function() {
+                menuButton.classList.toggle('close');
                 
-                // Сохраняем выбранный тип
-                selectedWorkerType = this.getAttribute('data-type');
-                
-                // Показываем следующие секции
-                datetimeSection.classList.remove('hidden');
-                workersSection.classList.remove('hidden');
-                hoursSection.classList.remove('hidden');
-                descriptionSection.classList.remove('hidden');
-                addressSection.classList.remove('hidden');
-                contactsSection.classList.remove('hidden');
-                nextButton.classList.remove('hidden');
-            });
-            
-            // Управление счетчиком исполнителей
-            const workersElement = document.getElementById('workers-count');
-            const decreaseWorkersBtn = document.getElementById('decrease-workers');
-            const increaseWorkersBtn = document.getElementById('increase-workers');
-            
-            increaseWorkersBtn.addEventListener('click', function() {
-                workersCount++;
-                workersElement.textContent = workersCount;
-            });
-            
-            decreaseWorkersBtn.addEventListener('click', function() {
-                if (workersCount > 1) {
-                    workersCount--;
-                    workersElement.textContent = workersCount;
-                }
-            });
-            
-            // Управление счетчиком часов
-            const hoursElement = document.getElementById('hours-count');
-            const decreaseHoursBtn = document.getElementById('decrease-hours');
-            const increaseHoursBtn = document.getElementById('increase-hours');
-            
-            increaseHoursBtn.addEventListener('click', function() {
-                hoursCount++;
-                hoursElement.textContent = hoursCount;
-            });
-            
-            decreaseHoursBtn.addEventListener('click', function() {
-                if (hoursCount > 1) {
-                    hoursCount--;
-                    hoursElement.textContent = hoursCount;
-                }
-            });
-            
-            // Добавление контактов
-            document.getElementById('add-contact-btn').addEventListener('click', function() {
-                const contactsContainer = document.getElementById('contacts-container');
-                contactCounter++;
-                
-                const contactDiv = document.createElement('div');
-                contactDiv.className = 'contact-container';
-                contactDiv.setAttribute('data-contact-id', contactCounter);
-                contactDiv.innerHTML = `
-                    <input type="text" class="contact-input" placeholder="Имя">
-                    <input type="tel" class="contact-input" placeholder="Номер телефона">
-                    <div class="contact-actions">
-                        <button class="contact-action-btn reset-btn" onclick="resetContactInputs(this)">
-                            <i class="fas fa-times"></i> Сбросить
-                        </button>
-                        <button class="contact-action-btn delete-btn" onclick="deleteContact(this)">
-                            <i class="fas fa-trash"></i> Удалить
-                        </button>
-                    </div>
-                `;
-                
-                contactsContainer.appendChild(contactDiv);
-                
-                // Добавляем кнопку удаления к первому контакту, если это второй контакт
-                if (contactCounter === 2) {
-                    const firstContact = document.querySelector('[data-contact-id="1"]');
-                    const contactActions = firstContact.querySelector('.contact-actions');
-                    
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'contact-action-btn delete-btn';
-                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Удалить';
-                    deleteBtn.onclick = function() { deleteContact(this); };
-                    
-                    contactActions.appendChild(deleteBtn);
-                }
-            });
-            
-            // Глобальные функции для работы с контактами
-            window.resetContactInputs = function(button) {
-                const contactContainer = button.closest('.contact-container');
-                const inputs = contactContainer.querySelectorAll('.contact-input');
-                inputs.forEach(input => input.value = '');
-            };
-            
-            window.deleteContact = function(button) {
-                const contactContainer = button.closest('.contact-container');
-                const contactId = contactContainer.getAttribute('data-contact-id');
-                
-                // Нельзя удалить единственный контакт
-                const allContacts = document.querySelectorAll('.contact-container');
-                if (allContacts.length <= 1) return;
-                
-                contactContainer.remove();
-                
-                // Если удалили не первый контакт, и остался только один - убираем кнопку удаления у первого
-                const remainingContacts = document.querySelectorAll('.contact-container');
-                if (remainingContacts.length === 1) {
-                    const firstContact = document.querySelector('[data-contact-id="1"]');
-                    const deleteBtn = firstContact.querySelector('.delete-btn');
-                    if (deleteBtn) deleteBtn.remove();
-                }
-            };
-            
-            // Навигация по календарю
-            document.getElementById('prev-month').addEventListener('click', function() {
-                currentMonth--;
-                if (currentMonth < 0) {
-                    currentMonth = 11;
-                    currentYear--;
-                }
-                generateCalendar(currentMonth, currentYear);
-            });
-            
-            document.getElementById('next-month').addEventListener('click', function() {
-                currentMonth++;
-                if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
-                }
-                generateCalendar(currentMonth, currentYear);
-            });
-            
-            // Сохранение выбранной даты и времени
-            saveDateBtn.addEventListener('click', function() {
-                if (selectedDate && selectedTime) {
-                    const date = new Date(selectedDate);
-                    const formattedDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()} ${selectedTime}`;
-                    datetimeInput.value = formattedDate;
-                    calendarModal.style.display = 'none';
+                if (menuOverlay.classList.contains('active')) {
+                    menuOverlay.classList.remove('active');
                 } else {
-                    alert('Пожалуйста, выберите дату и время');
+                    menuOverlay.classList.add('active');
                 }
             });
             
-            // Генерация календаря
-            function generateCalendar(month, year) {
-                const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-                    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-                const dayNames = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+            // Обработчик кнопки создания заказа
+            document.getElementById('order-button').addEventListener('click', function() {
+                // Переход на страницу заказа
+                window.location.href = 'zakaz.html';
+            });
+            
+            // Обработчик кнопки расчета стоимости
+            document.getElementById('calculate-button').addEventListener('click', function() {
+                // Переход на страницу калькулятора
+                window.location.href = 'calculator.html';
+            });
+            
+            // Функция для обработки нажатия на пункты меню
+            function handleMenuItemClick(itemId, waveId, pageName) {
+                const item = document.getElementById(itemId);
+                const wave = document.getElementById(waveId);
                 
-                document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
-                
-                const firstDay = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                
-                // Adjust for Monday as first day of week
-                let firstDayIndex = firstDay === 0 ? 6 : firstDay - 1;
-                
-                const calendarDays = document.getElementById('calendar-days');
-                calendarDays.innerHTML = '';
-                
-                // Previous month days
-                const prevMonthDays = new Date(year, month, 0).getDate();
-                for (let i = firstDayIndex; i > 0; i--) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day other-month';
-                    dayElement.textContent = prevMonthDays - i + 1;
-                    calendarDays.appendChild(dayElement);
-                }
-                
-                // Current month days
-                const today = new Date();
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day';
-                    dayElement.textContent = i;
+                item.addEventListener('click', function() {
+                    // Блокируем кнопку на 1 секунду
+                    item.classList.add('disabled');
                     
-                    // Check if today
-                    if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-                        dayElement.classList.add('today');
-                    }
+                    // Запускаем волновую анимацию
+                    wave.classList.add('animate');
                     
-                    // Check if selected
-                    if (selectedDate && i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
-                        dayElement.classList.add('selected');
-                    }
+                    // Через 0.5s показываем сообщение
+                    setTimeout(() => {
+                        tg.showAlert(`Переход к странице ${pageName}`);
+                    }, 500);
                     
-                    dayElement.addEventListener('click', function() {
-                        document.querySelectorAll('.calendar-day').forEach(day => day.classList.remove('selected'));
-                        this.classList.add('selected');
-                        selectedDate = new Date(year, month, i);
-                        
-                        // Обновляем информацию о выбранной дате
-                        const dayName = dayNames[selectedDate.getDay()];
-                        selectedDateInfo.textContent = `${i} ${monthNames[month]}, ${dayName}`;
-                    });
-                    
-                    calendarDays.appendChild(dayElement);
-                }
-                
-                // Next month days
-                const daysNeeded = 42 - (firstDayIndex + daysInMonth); // 6 rows x 7 days
-                for (let i = 1; i <= daysNeeded; i++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day other-month';
-                    dayElement.textContent = i;
-                    calendarDays.appendChild(dayElement);
-                }
-                
-                // Time slots
-                const timeSlots = document.querySelectorAll('.time-slot');
-                timeSlots.forEach(slot => {
-                    slot.addEventListener('click', function() {
-                        timeSlots.forEach(s => s.classList.remove('selected'));
-                        this.classList.add('selected');
-                        selectedTime = this.getAttribute('data-time');
-                    });
+                    // Через 1s сбрасываем анимацию и разблокируем кнопку
+                    setTimeout(() => {
+                        wave.classList.remove('animate');
+                        wave.style.width = '0';
+                        wave.style.opacity = '1';
+                        item.classList.remove('disabled');
+                    }, 1000);
                 });
-                
-                // Сбрасываем информацию о выбранной дате
-                selectedDateInfo.textContent = '';
             }
             
-            // Обработчик кнопки "Далее"
-            nextButton.addEventListener('click', function() {
-                const datetime = datetimeInput.value;
-                const title = document.getElementById('order-title').value;
-                const description = document.getElementById('order-description').value;
-                const address = document.getElementById('order-address').value;
-                const instructions = document.getElementById('address-instructions').value;
-                
-                // Сбор контактов
-                const contacts = [];
-                const contactContainers = document.querySelectorAll('.contact-container');
-                contactContainers.forEach(container => {
-                    const inputs = container.querySelectorAll('.contact-input');
-                    if (inputs[0].value && inputs[1].value) {
-                        contacts.push({
-                            name: inputs[0].value,
-                            phone: inputs[1].value
-                        });
-                    }
-                });
-                
-                // Валидация
-                let isValid = true;
-                let errorMessage = '';
-                
-                if (!selectedWorkerType) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, выберите тип рабочего';
-                } else if (!datetime) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, укажите дату и время выполнения заказа';
-                } else if (!title || !description) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, заполните описание заказа';
-                } else if (!address) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, укажите адрес оказания услуг';
-                } else if (contacts.length === 0) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, укажите хотя бы один контакт для связи';
-                }
-                
-                if (!isValid) {
-                    tg.showAlert(errorMessage);
-                    return;
-                }
-                
-                // Сохраняем данные заказа
-                const orderData = {
-                    workerType: selectedWorkerType,
-                    workers: workersCount,
-                    hours: hoursCount,
-                    datetime: datetime,
-                    title: title,
-                    description: description,
-                    address: address,
-                    instructions: instructions,
-                    contacts: contacts,
-                    userId: userId
-                };
-                
-                localStorage.setItem('currentOrder', JSON.stringify(orderData));
-                
-                tg.showAlert('Заказ успешно создан! В будущем здесь будет переход к подтверждению заказа.');
-            });
+            // Назначаем обработчики для всех пунктов меню
+            handleMenuItemClick('profile-menu-item', 'profile-wave', 'профиля');
+            handleMenuItemClick('history-menu-item', 'history-wave', 'истории заказов');
+            handleMenuItemClick('support-menu-item', 'support-wave', 'поддержки');
+            handleMenuItemClick('about-menu-item', 'about-wave', 'о нас');
             
             // Разворачиваем приложение на весь экран
             tg.expand();
