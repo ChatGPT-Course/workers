@@ -67,8 +67,18 @@
         
         .section-title {
             font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 16px;
+            margin-bottom: 16px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+            color: #FF8C00;
         }
         
         .commission-notice {
@@ -82,7 +92,7 @@
         }
         
         .payment-section {
-            background-color: white;
+            background-color: #f1f8e9;
             border-radius: 10px;
             padding: 16px;
             margin-bottom: 16px;
@@ -94,6 +104,13 @@
             margin-bottom: 16px;
             font-size: 16px;
             color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .payment-title i {
+            color: #4caf50;
         }
         
         .payment-details {
@@ -116,7 +133,7 @@
             font-weight: 600;
             font-size: 16px;
             padding-top: 16px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #ddd;
             color: #333;
         }
         
@@ -126,6 +143,19 @@
             padding: 16px;
             margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-title i {
+            color: #FF8C00;
         }
         
         .info-row {
@@ -154,6 +184,9 @@
             color: #333;
             line-height: 1.5;
             white-space: pre-line;
+            background-color: #f8f8f8;
+            padding: 12px;
+            border-radius: 8px;
         }
         
         .datetime-container {
@@ -249,6 +282,14 @@
             align-items: center;
             gap: 8px;
         }
+        
+        .info-group {
+            margin-bottom: 20px;
+        }
+        
+        .info-group:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -266,7 +307,10 @@
         </div>
         
         <div class="payment-section">
-            <div class="payment-title">К оплате</div>
+            <div class="payment-title">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>К оплате</span>
+            </div>
             <div class="payment-details">
                 <div class="payment-row">
                     <span>Ставка (рублей / час)</span>
@@ -288,47 +332,61 @@
         </div>
         
         <div class="info-section">
+            <div class="info-title">
+                <i class="far fa-calendar-alt"></i>
+                <span>Дата и время</span>
+            </div>
             <div class="info-row">
-                <div class="info-label">Дата и время</div>
-                <div class="datetime-container">
-                    <div class="datetime-item">
-                        <div class="datetime-label">Дата</div>
-                        <div class="datetime-value" id="date-value">06.10.2025 (пн)</div>
-                    </div>
-                    <div class="datetime-item">
-                        <div class="datetime-label">Время</div>
-                        <div class="datetime-value" id="time-value">08:00</div>
-                    </div>
+                <div class="info-label">Дата</div>
+                <div class="info-value" id="date-value">06.10.2025 (пн)</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Время</div>
+                <div class="info-value" id="time-value">08:00</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-title">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Адрес</span>
+            </div>
+            <div class="info-group">
+                <div class="info-label">Адрес заказа</div>
+                <div class="address-container">
+                    <div class="address-value" id="address-value">Москва, Центральный административный округ, Москва, Тверской, 1-я Тверская-Ямская улица, 8</div>
+                </div>
+            </div>
+            <div class="info-group">
+                <div class="info-label">Как добраться?</div>
+                <div class="address-container">
+                    <div class="address-value" id="instructions-value">na</div>
                 </div>
             </div>
         </div>
         
         <div class="info-section">
-            <div class="info-row">
-                <div class="info-label">Адрес</div>
-                <div style="flex: 1;">
-                    <div class="address-container">
-                        <div class="address-label">Адрес заказа</div>
-                        <div class="address-value" id="address-value">Москва, Центральный административный округ, Москва, Тверской, 1-я Тверская-Ямская улица, 8</div>
-                    </div>
-                    <div class="address-container">
-                        <div class="address-label">Как добраться?</div>
-                        <div class="address-value" id="instructions-value">na</div>
-                    </div>
-                </div>
+            <div class="info-title">
+                <i class="far fa-edit"></i>
+                <span>Описание заказа</span>
             </div>
-        </div>
-        
-        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Название</div>
+                <div class="info-value-large" id="title-value">Раскидать дрова</div>
+            </div>
             <div class="info-row">
                 <div class="info-label">Описание</div>
-                <div class="info-value-large" id="description-value">П<br>A</div>
+                <div class="info-value-large" id="description-value">Перенести дрова из кузова машины и аккуратно сложить их у сарая</div>
             </div>
         </div>
         
         <div class="info-section">
+            <div class="info-title">
+                <i class="fas fa-address-book"></i>
+                <span>Контакты</span>
+            </div>
             <div class="info-row">
-                <div class="info-label">Контакты</div>
+                <div class="info-label">Для связи</div>
                 <div class="contacts-container" id="contacts-container">
                     <div class="contact-item">
                         <div class="contact-name">Егор С С</div>
@@ -363,8 +421,8 @@
                 // Дата и время
                 if (orderData.datetime) {
                     const datetimeParts = orderData.datetime.split(' ');
-                    document.getElementById('date-value').textContent = datetimeParts[0];
-                    document.getElementById('time-value').textContent = datetimeParts[1];
+                    document.getElementById('date-value').textContent = datetimeParts[0] + ' ' + datetimeParts[1];
+                    document.getElementById('time-value').textContent = datetimeParts[2];
                 }
                 
                 // Адрес
@@ -372,7 +430,8 @@
                 document.getElementById('instructions-value').textContent = orderData.instructions || 'Не указано';
                 
                 // Описание
-                document.getElementById('description-value').textContent = orderData.title + '\n' + orderData.description;
+                document.getElementById('title-value').textContent = orderData.title;
+                document.getElementById('description-value').textContent = orderData.description;
                 
                 // Контакты
                 const contactsContainer = document.getElementById('contacts-container');
@@ -394,7 +453,8 @@
             
             // Обработчик кнопки назад
             backButton.addEventListener('click', function() {
-                window.location.href = 'zakaz.html';
+                // Добавляем параметр для указания, что это возврат с подтверждения
+                window.location.href = 'zakaz.html?fromConfirmation=true';
             });
             
             // Обработчик кнопки отправки
