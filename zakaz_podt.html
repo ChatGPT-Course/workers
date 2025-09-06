@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение заказа | Персонал 96</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f9f5f0;
+            color: #000000;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding: 8px 8px 100px 8px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            height: 56px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            position: fixed;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            z-index: 100;
+        }
+        
+        .header-title {
+            font-weight: 600;
+            font-size: 18px;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .back-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #d0d0d0;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .commission-notice {
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .payment-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .payment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .payment-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .info-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            min-width: 120px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .info-value-large {
+            flex: 1;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .submit-button {
+            position: fixed;
+            bottom: 16px;
+            left: 8px;
+            right: 8px;
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            z-index: 99;
+        }
+        
+        .form-container {
+            margin-top: 64px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-button" id="back-button">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-title">Проверьте данные заказа</div>
+        <div style="width: 36px;"></div> <!-- Для выравнивания -->
+    </div>
+    
+    <div class="form-container">
+        <div class="commission-notice">
+            1. Комиссия оплачивается после завершения заказа за отработавших исполнителей в размере 100 ₽
+        </div>
+        
+        <div class="payment-section">
+            <div class="payment-title">К оплате</div>
+            <div class="payment-details">
+                <div class="payment-row">
+                    <span>Ставка (рублей / час)</span>
+                    <span id="rate-value">900 ₽</span>
+                </div>
+                <div class="payment-row">
+                    <span>Продолжительность (часов)</span>
+                    <span id="hours-value">× 1</span>
+                </div>
+                <div class="payment-row">
+                    <span>Количество исполнителей</span>
+                    <span id="workers-value">× 1</span>
+                </div>
+            </div>
+            <div class="payment-total">
+                <span>К оплате исполнителям Итого:</span>
+                <span id="total-value">900 ₽</span>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Дата</div>
+                <div class="info-value" id="date-value">06.10.2025 (пн)</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Время</div>
+                <div class="info-value" id="time-value">08:00</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Адрес заказа</div>
+                <div class="info-value" id="address-value">Москва, Центральный административный округ, Москва, Тверской, 1-я Тверская-Ямская улица, 8</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Как добраться?</div>
+                <div class="info-value" id="instructions-value">na</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Описание заказа</div>
+                <div class="info-value-large" id="description-value">П<br>A</div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Контакты</div>
+                <div class="info-value" id="contacts-value">Егор С С +7 (932) 207 84 14</div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="submit-button" id="submit-button">Отправить на публикацию</button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg = window.Telegram.WebApp;
+            
+            // Получаем данные заказа из localStorage
+            const orderData = JSON.parse(localStorage.getItem('currentOrder'));
+            
+            // Элементы DOM
+            const backButton = document.getElementById('back-button');
+            const submitButton = document.getElementById('submit-button');
+            
+            // Заполняем данные на странице
+            if (orderData) {
+                // Расчетные данные
+                document.getElementById('rate-value').textContent = orderData.rate + ' ₽';
+                document.getElementById('hours-value').textContent = '× ' + orderData.hours;
+                document.getElementById('workers-value').textContent = '× ' + orderData.workers;
+                document.getElementById('total-value').textContent = orderData.total + ' ₽';
+                
+                // Дата и время
+                const datetimeParts = orderData.datetime.split(' ');
+                document.getElementById('date-value').textContent = datetimeParts[0];
+                document.getElementById('time-value').textContent = datetimeParts[1];
+                
+                // Адрес
+                document.getElementById('address-value').textContent = orderData.address;
+                document.getElementById('instructions-value').textContent = orderData.instructions || 'Не указано';
+                
+                // Описание
+                document.getElementById('description-value').textContent = orderData.title + '\n' + orderData.description;
+                
+                // Контакты
+                const contactsText = orderData.contacts.map(contact => {
+                    return contact.name + ' ' + contact.phone;
+                }).join(', ');
+                document.getElementById('contacts-value').textContent = contactsText;
+            } else {
+                // Если данных нет, возвращаем на страницу заказа
+                window.location.href = 'zakaz.html';
+            }
+            
+            // Обработчик кнопки назад
+            backButton.addEventListener('click', function() {
+                window.location.href = 'zakaz.html';
+            });
+            
+            // Обработчик кнопки отправки
+            submitButton.addEventListener('click', function() {
+                tg.showAlert('Заказ успешно отправлен на публикацию!');
+                // В реальном приложении здесь был бы запрос к серверу
+            });
+            
+            // Разворачиваем приложение на весь экран
+            tg.expand();
+        });
+    </script>
+</body>
+</html>
