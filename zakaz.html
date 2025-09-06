@@ -311,7 +311,7 @@
             justify-content: center;
             z-index: 1000;
             display: none;
-            padding: 20px; /* Добавлены отступы */
+            padding: 20px;
         }
         
         .modal {
@@ -321,8 +321,8 @@
             width: 100%;
             max-width: 400px;
             position: relative;
-            max-height: 90vh; /* Ограничение по высоте */
-            overflow-y: auto; /* Прокрутка если контент не помещается */
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-close {
@@ -1055,12 +1055,15 @@
                     address: address,
                     instructions: instructions,
                     contacts: contacts,
-                    userId: userId
+                    userId: userId,
+                    rate: 900, // Ставка 900 рублей в час
+                    total: workersCount * hoursCount * 900 // Общая сумма
                 };
                 
                 localStorage.setItem('currentOrder', JSON.stringify(orderData));
                 
-                tg.showAlert('Заказ успешно создан! В будущем здесь будет переход к подтверждению заказа.');
+                // Переход на страницу подтверждения
+                window.location.href = 'zakaz_podt.html';
             });
             
             // Разворачиваем приложение на весь экран
