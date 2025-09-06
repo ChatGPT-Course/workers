@@ -582,7 +582,7 @@
             <div class="error-message" id="hours-error">Пожалуйста, укажите количество часов</div>
         </div>
         
-        <!-- Описание заказа ( скрыто изначально) -->
+        <!-- Описание заказа (скрыто изначально) -->
         <div class="section hidden" id="description-section">
             <div class="section-title">
                 <i class="far fa-edit"></i>
@@ -1047,4 +1047,185 @@
             });
             
             // Генерация календаря
-            function generateCalendar(month,
+            function generateCalendar(month, year) {
+                const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+                const dayNames = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+                
+                document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
+                
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                // Adjust for Monday as first day of week
+                let firstDayIndex = firstDay === 0 ? 6 : firstDay - 1;
+                
+                const calendarDays = document.getElementById('calendar-days');
+                calendarDays.innerHTML = '';
+                
+                // Previous month days
+                const prevMonthDays = new Date(year, month, 0).getDate();
+                for (let i = firstDayIndex; i > 0; i--) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day other-month';
+                    dayElement.textContent = prevMonthDays - i + 1;
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                // Current month days
+                const today = new Date();
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = i;
+                    
+                    // Check if today
+                    if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        dayElement.classList.add('today');
+                    }
+                    
+                    // Check if selected
+                    if (selectedDate && i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
+                        dayElement.classList.add('selected');
+                    }
+                    
+                    dayElement.addEventListener('click', function() {
+                        document.querySelectorAll('.calendar-day').forEach(day => day.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedDate = new Date(year, month, i);
+                        
+                        // Обновляем информацию о выбранной дате
+                        const dayName = dayNames[selectedDate.getDay()];
+                        selectedDateInfo.textContent = `${i} ${monthNames[month]}, ${dayName}`;
+                    });
+                    
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                // Next month days
+                const daysNeeded = 42 - (firstDayIndex + daysInMonth); // 6 rows x 7 days
+                for (let i = 1; i <= daysNeeded; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day other-month';
+                    dayElement.textContent = i;
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                // Time slots
+                const timeSlots = document.querySelectorAll('.time-slot');
+                timeSlots.forEach(slot => {
+                    slot.addEventListener('click', function() {
+                        timeSlots.forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedTime = this.getAttribute('data-time');
+                    });
+                });
+                
+                // Сбрасываем информацию о выбранной дате
+                selectedDateInfo.textContent = '';
+            }
+            
+            // Валидация полей
+            function validateField(fieldId, errorId, condition) {
+                const field = document.getElementById(fieldId);
+                const error = errorMessages[errorId];
+                
+                if (condition) {
+                    field.classList.add('error');
+                    error.style.display = 'block';
+                    return false;
+                } else {
+                    field.classList.remove('error');
+                    error.style.display = 'none';
+                    return true;
+                }
+            }
+            
+            // Прокрутка к первому полю с ошибкой
+            function scrollToFirstError() {
+                for (const [key, errorElement] of Object.entries(errorMessages)) {
+                    if (errorElement.style.display === 'block') {
+                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        break;
+                    }
+                }
+            }
+            
+            // Обработчик кнопки "Далее"
+            nextButton.addEventListener('click', function() {
+                const datetime = datetimeInput.value;
+                const title = document.getElementById('order-title').value;
+                const description = document.getElementById('order-description').value;
+                const address = document.getElementById('order-address').value;
+                
+                // Сбор контактов
+                const contacts = [];
+                const contactContainers = document.querySelectorAll('.contact-container');
+                let hasValidContact = false;
+                
+                contactContainers.forEach(container => {
+                    const inputs = container.querySelectorAll('.contact-input');
+                    const name = inputs[0].value;
+                    const phone = inputs[1].value;
+                    
+                    // Проверяем, заполнены ли оба поля контакта
+                    if (name && phone) {
+                        contacts.push({
+                            name: name,
+                            phone: phone
+                        });
+                        hasValidContact = true;
+                        inputs[0].classList.remove('error');
+                        inputs[1].classList.remove('error');
+                    } else if (name || phone) {
+                        // Если заполнено только одно поле
+                        if (!name) inputs[0].classList.add('error');
+                        if (!phone) inputs[1].classList.add('error');
+                    }
+                });
+                
+                // Валидация полей по очереди
+                let isValid = true;
+                
+                if (!validateField('worker-type-section', 'workerType', !selectedWorkerType)) isValid = false;
+                if (isValid && !validateField('order-datetime', 'datetime', !datetime)) isValid = false;
+                if (isValid && !validateField('workers-count', 'workers', workersCount < 1)) isValid = false;
+                if (isValid && !validateField('hours-count', 'hours', hoursCount < 1)) isValid = false;
+                if (isValid && !validateField('order-title', 'title', !title)) isValid = false;
+                if (isValid && !validateField('order-description', 'description', !description)) isValid = false;
+                if (isValid && !validateField('order-address', 'address', !address)) isValid = false;
+                if (isValid && !validateField('contacts-container', 'contacts', !hasValidContact)) isValid = false;
+                
+                if (!isValid) {
+                    scrollToFirstError();
+                    return;
+                }
+                
+                // Сохраняем данные заказа
+                const orderData = {
+                    workerType: selectedWorkerType,
+                    workers: workersCount,
+                    hours: hoursCount,
+                    datetime: datetime,
+                    title: title,
+                    description: description,
+                    address: address,
+                    instructions: document.getElementById('address-instructions').value,
+                    contacts: contacts,
+                    userId: userId,
+                    rate: 900, // Ставка 900 рублей в час
+                    total: workersCount * hoursCount * 900 // Общая сумма
+                };
+                
+                localStorage.setItem('currentOrder', JSON.stringify(orderData));
+                
+                // Переход на страницу подтверждения
+                window.location.href = 'zakaz_podt.html';
+            });
+            
+            // Разворачиваем приложение на весь экран
+            tg.expand();
+        });
+    </script>
+</body>
+</html>
