@@ -69,24 +69,16 @@
             font-weight: 600;
             margin-bottom: 12px;
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .section-title i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
         }
         
         .commission-notice {
-            background-color: #f8f8f8;
+            background-color: #e3f2fd;
             border-radius: 8px;
             padding: 12px;
             margin-bottom: 16px;
             font-size: 14px;
-            color: #555;
+            color: #1976d2;
+            border-left: 4px solid #1976d2;
         }
         
         .payment-section {
@@ -99,22 +91,23 @@
         
         .payment-title {
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             font-size: 16px;
+            color: #333;
         }
         
         .payment-details {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         
         .payment-row {
             display: flex;
             justify-content: space-between;
             font-size: 14px;
-            color: #555;
+            color: #666;
         }
         
         .payment-total {
@@ -122,8 +115,9 @@
             justify-content: space-between;
             font-weight: 600;
             font-size: 16px;
-            padding-top: 12px;
+            padding-top: 16px;
             border-top: 1px solid #eee;
+            color: #333;
         }
         
         .info-section {
@@ -136,25 +130,97 @@
         
         .info-row {
             display: flex;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            align-items: flex-start;
         }
         
         .info-label {
             font-weight: 500;
             min-width: 120px;
-            color: #555;
+            color: #666;
             font-size: 14px;
         }
         
         .info-value {
             flex: 1;
             font-size: 14px;
+            color: #333;
+            line-height: 1.5;
         }
         
         .info-value-large {
             flex: 1;
             font-size: 14px;
-            margin-top: 4px;
+            color: #333;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+        
+        .datetime-container {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .datetime-item {
+            flex: 1;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        
+        .datetime-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .datetime-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .address-container {
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .address-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .address-value {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .contacts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .contact-item {
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        
+        .contact-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .contact-phone {
+            font-size: 14px;
+            color: #666;
         }
         
         .submit-button {
@@ -177,6 +243,12 @@
         .form-container {
             margin-top: 64px;
         }
+        
+        .icon-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -190,7 +262,7 @@
     
     <div class="form-container">
         <div class="commission-notice">
-            1. Комиссия оплачивается после завершения заказа за отработавших исполнителей в размере 100 ₽
+            Комиссия оплачивается после завершения заказа за отработавших исполнителей в размере 100 ₽
         </div>
         
         <div class="payment-section">
@@ -217,29 +289,39 @@
         
         <div class="info-section">
             <div class="info-row">
-                <div class="info-label">Дата</div>
-                <div class="info-value" id="date-value">06.10.2025 (пн)</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Время</div>
-                <div class="info-value" id="time-value">08:00</div>
-            </div>
-        </div>
-        
-        <div class="info-section">
-            <div class="info-row">
-                <div class="info-label">Адрес заказа</div>
-                <div class="info-value" id="address-value">Москва, Центральный административный округ, Москва, Тверской, 1-я Тверская-Ямская улица, 8</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Как добраться?</div>
-                <div class="info-value" id="instructions-value">na</div>
+                <div class="info-label">Дата и время</div>
+                <div class="datetime-container">
+                    <div class="datetime-item">
+                        <div class="datetime-label">Дата</div>
+                        <div class="datetime-value" id="date-value">06.10.2025 (пн)</div>
+                    </div>
+                    <div class="datetime-item">
+                        <div class="datetime-label">Время</div>
+                        <div class="datetime-value" id="time-value">08:00</div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="info-section">
             <div class="info-row">
-                <div class="info-label">Описание заказа</div>
+                <div class="info-label">Адрес</div>
+                <div style="flex: 1;">
+                    <div class="address-container">
+                        <div class="address-label">Адрес заказа</div>
+                        <div class="address-value" id="address-value">Москва, Центральный административный округ, Москва, Тверской, 1-я Тверская-Ямская улица, 8</div>
+                    </div>
+                    <div class="address-container">
+                        <div class="address-label">Как добраться?</div>
+                        <div class="address-value" id="instructions-value">na</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Описание</div>
                 <div class="info-value-large" id="description-value">П<br>A</div>
             </div>
         </div>
@@ -247,7 +329,12 @@
         <div class="info-section">
             <div class="info-row">
                 <div class="info-label">Контакты</div>
-                <div class="info-value" id="contacts-value">Егор С С +7 (932) 207 84 14</div>
+                <div class="contacts-container" id="contacts-container">
+                    <div class="contact-item">
+                        <div class="contact-name">Егор С С</div>
+                        <div class="contact-phone">+7 (932) 207 84 14</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -274,9 +361,11 @@
                 document.getElementById('total-value').textContent = orderData.total + ' ₽';
                 
                 // Дата и время
-                const datetimeParts = orderData.datetime.split(' ');
-                document.getElementById('date-value').textContent = datetimeParts[0];
-                document.getElementById('time-value').textContent = datetimeParts[1];
+                if (orderData.datetime) {
+                    const datetimeParts = orderData.datetime.split(' ');
+                    document.getElementById('date-value').textContent = datetimeParts[0];
+                    document.getElementById('time-value').textContent = datetimeParts[1];
+                }
                 
                 // Адрес
                 document.getElementById('address-value').textContent = orderData.address;
@@ -286,10 +375,18 @@
                 document.getElementById('description-value').textContent = orderData.title + '\n' + orderData.description;
                 
                 // Контакты
-                const contactsText = orderData.contacts.map(contact => {
-                    return contact.name + ' ' + contact.phone;
-                }).join(', ');
-                document.getElementById('contacts-value').textContent = contactsText;
+                const contactsContainer = document.getElementById('contacts-container');
+                contactsContainer.innerHTML = '';
+                
+                orderData.contacts.forEach(contact => {
+                    const contactItem = document.createElement('div');
+                    contactItem.className = 'contact-item';
+                    contactItem.innerHTML = `
+                        <div class="contact-name">${contact.name}</div>
+                        <div class="contact-phone">${contact.phone}</div>
+                    `;
+                    contactsContainer.appendChild(contactItem);
+                });
             } else {
                 // Если данных нет, возвращаем на страницу заказа
                 window.location.href = 'zakaz.html';
@@ -304,6 +401,9 @@
             submitButton.addEventListener('click', function() {
                 tg.showAlert('Заказ успешно отправлен на публикацию!');
                 // В реальном приложении здесь был бы запрос к серверу
+                
+                // Очищаем сохраненные данные после успешной отправки
+                localStorage.removeItem('currentOrder');
             });
             
             // Разворачиваем приложение на весь экран
