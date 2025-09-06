@@ -160,6 +160,10 @@
             border-color: #FF8C00;
         }
         
+        .input-field.error {
+            border-color: #ff4444;
+        }
+        
         .textarea-field {
             width: 100%;
             padding: 12px;
@@ -169,6 +173,10 @@
             margin-bottom: 12px;
             resize: vertical;
             min-height: 100px;
+        }
+        
+        .textarea-field.error {
+            border-color: #ff4444;
         }
         
         .counter-container {
@@ -223,6 +231,10 @@
             cursor: pointer;
         }
         
+        .datetime-input.error {
+            border-color: #ff4444;
+        }
+        
         .contact-container {
             margin-bottom: 16px;
             padding: 12px;
@@ -237,6 +249,10 @@
             border-radius: 8px;
             font-size: 16px;
             margin-bottom: 12px;
+        }
+        
+        .contact-input.error {
+            border-color: #ff4444;
         }
         
         .contact-actions {
@@ -296,6 +312,14 @@
         }
         
         .hidden {
+            display: none;
+        }
+        
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: -8px;
+            margin-bottom: 12px;
             display: none;
         }
         
@@ -517,6 +541,7 @@
                     <div class="worker-name">Разнорабочий</div>
                 </div>
             </div>
+            <div class="error-message" id="worker-type-error">Пожалуйста, выберите тип рабочего</div>
         </div>
         
         <!-- Дата и время (скрыто изначально) -->
@@ -526,6 +551,7 @@
                 <span>Дата и время выполнения</span>
             </div>
             <input type="text" class="datetime-input" id="order-datetime" readonly placeholder="Выберите дату и время">
+            <div class="error-message" id="datetime-error">Пожалуйста, укажите дату и время выполнения заказа</div>
         </div>
         
         <!-- Количество исполнителей (скрыто изначально) -->
@@ -539,6 +565,7 @@
                 <span class="counter-value" id="workers-count">1</span>
                 <button class="counter-button" id="increase-workers">+</button>
             </div>
+            <div class="error-message" id="workers-error">Пожалуйста, укажите количество исполнителей</div>
         </div>
         
         <!-- Часы работы (скрыто изначально) -->
@@ -552,6 +579,7 @@
                 <span class="counter-value" id="hours-count">1</span>
                 <button class="counter-button" id="increase-hours">+</button>
             </div>
+            <div class="error-message" id="hours-error">Пожалуйста, укажите количество часов</div>
         </div>
         
         <!-- Описание заказа (скрыто изначально) -->
@@ -563,10 +591,12 @@
             <div class="input-container">
                 <div class="input-label">Дайте название заказа</div>
                 <input type="text" class="input-field" id="order-title" placeholder="Например: раскидать дрова">
+                <div class="error-message" id="title-error">Пожалуйста, укажите название заказа</div>
             </div>
             <div class="input-container">
                 <div class="input-label">Что нужно делать?</div>
                 <textarea class="textarea-field" id="order-description" placeholder="Например: Дайте описание объем работ"></textarea>
+                <div class="error-message" id="description-error">Пожалуйста, укажите описание заказа</div>
             </div>
         </div>
         
@@ -579,6 +609,7 @@
             <div class="input-container">
                 <div class="input-label">Адрес заказа</div>
                 <input type="text" class="input-field" id="order-address" placeholder="Введите адрес">
+                <div class="error-message" id="address-error">Пожалуйста, укажите адрес заказа</div>
             </div>
             <div class="input-container">
                 <div class="input-label">Как добраться до адреса</div>
@@ -603,6 +634,7 @@
                     </div>
                 </div>
             </div>
+            <div class="error-message" id="contacts-error">Пожалуйста, укажите хотя бы один контакт для связи</div>
             <button class="add-contact-btn" id="add-contact-btn">
                 <i class="fas fa-plus"></i> Добавить еще контакт
             </button>
@@ -722,6 +754,18 @@
             const addressSection = document.getElementById('address-section');
             const contactsSection = document.getElementById('contacts-section');
             
+            // Сообщения об ошибках
+            const errorMessages = {
+                workerType: document.getElementById('worker-type-error'),
+                datetime: document.getElementById('datetime-error'),
+                workers: document.getElementById('workers-error'),
+                hours: document.getElementById('hours-error'),
+                title: document.getElementById('title-error'),
+                description: document.getElementById('description-error'),
+                address: document.getElementById('address-error'),
+                contacts: document.getElementById('contacts-error')
+            };
+            
             // Переменные состояния
             let selectedWorkerType = null;
             let workersCount = 1;
@@ -731,6 +775,68 @@
             let currentMonth = new Date().getMonth();
             let currentYear = new Date().getFullYear();
             let contactCounter = 1;
+            
+            // Загрузка сохраненных данных при возврате
+            const savedOrderData = JSON.parse(localStorage.getItem('currentOrder') || '{}');
+            if (savedOrderData.workerType) {
+                // Восстанавливаем данные из сохраненного заказа
+                selectedWorkerType = savedOrderData.workerType;
+                workersCount = savedOrderData.workers || 1;
+                hoursCount = savedOrderData.hours || 1;
+                
+                // Заполняем поля формы
+                workerCard.classList.add('selected');
+                document.getElementById('workers-count').textContent = workersCount;
+                document.getElementById('hours-count').textContent = hoursCount;
+                if (savedOrderData.datetime) datetimeInput.value = savedOrderData.datetime;
+                if (savedOrderData.title) document.getElementById('order-title').value = savedOrderData.title;
+                if (savedOrderData.description) document.getElementById('order-description').value = savedOrderData.description;
+                if (savedOrderData.address) document.getElementById('order-address').value = savedOrderData.address;
+                if (savedOrderData.instructions) document.getElementById('address-instructions').value = savedOrderData.instructions;
+                
+                // Показываем все секции
+                datetimeSection.classList.remove('hidden');
+                workersSection.classList.remove('hidden');
+                hoursSection.classList.remove('hidden');
+                descriptionSection.classList.remove('hidden');
+                addressSection.classList.remove('hidden');
+                contactsSection.classList.remove('hidden');
+                nextButton.classList.remove('hidden');
+                
+                // Восстанавливаем контакты
+                if (savedOrderData.contacts && savedOrderData.contacts.length > 0) {
+                    const contactsContainer = document.getElementById('contacts-container');
+                    contactsContainer.innerHTML = '';
+                    
+                    savedOrderData.contacts.forEach((contact, index) => {
+                        contactCounter = index + 1;
+                        const contactDiv = document.createElement('div');
+                        contactDiv.className = 'contact-container';
+                        contactDiv.setAttribute('data-contact-id', contactCounter);
+                        
+                        let contactHTML = `
+                            <input type="text" class="contact-input" placeholder="Имя" value="${contact.name || ''}">
+                            <input type="tel" class="contact-input" placeholder="Номер телефона" value="${contact.phone || ''}">
+                            <div class="contact-actions">
+                                <button class="contact-action-btn reset-btn" onclick="resetContactInputs(this)">
+                                    <i class="fas fa-times"></i> Сбросить
+                                </button>
+                        `;
+                        
+                        if (contactCounter > 1) {
+                            contactHTML += `
+                                <button class="contact-action-btn delete-btn" onclick="deleteContact(this)">
+                                    <i class="fas fa-trash"></i> Удалить
+                                </button>
+                            `;
+                        }
+                        
+                        contactHTML += `</div>`;
+                        contactDiv.innerHTML = contactHTML;
+                        contactsContainer.appendChild(contactDiv);
+                    });
+                }
+            }
             
             // Обработчик кнопки назад
             backButton.addEventListener('click', function() {
@@ -780,6 +886,9 @@
                 // Сохраняем выбранный тип
                 selectedWorkerType = this.getAttribute('data-type');
                 
+                // Скрываем ошибку
+                errorMessages.workerType.style.display = 'none';
+                
                 // Показываем следующие секции
                 datetimeSection.classList.remove('hidden');
                 workersSection.classList.remove('hidden');
@@ -798,12 +907,14 @@
             increaseWorkersBtn.addEventListener('click', function() {
                 workersCount++;
                 workersElement.textContent = workersCount;
+                errorMessages.workers.style.display = 'none';
             });
             
             decreaseWorkersBtn.addEventListener('click', function() {
                 if (workersCount > 1) {
                     workersCount--;
                     workersElement.textContent = workersCount;
+                    errorMessages.workers.style.display = 'none';
                 }
             });
             
@@ -815,12 +926,14 @@
             increaseHoursBtn.addEventListener('click', function() {
                 hoursCount++;
                 hoursElement.textContent = hoursCount;
+                errorMessages.hours.style.display = 'none';
             });
             
             decreaseHoursBtn.addEventListener('click', function() {
                 if (hoursCount > 1) {
                     hoursCount--;
                     hoursElement.textContent = hoursCount;
+                    errorMessages.hours.style.display = 'none';
                 }
             });
             
@@ -859,13 +972,18 @@
                     
                     contactActions.appendChild(deleteBtn);
                 }
+                
+                errorMessages.contacts.style.display = 'none';
             });
             
             // Глобальные функции для работы с контактами
             window.resetContactInputs = function(button) {
                 const contactContainer = button.closest('.contact-container');
                 const inputs = contactContainer.querySelectorAll('.contact-input');
-                inputs.forEach(input => input.value = '');
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('error');
+                });
             };
             
             window.deleteContact = function(button) {
@@ -912,6 +1030,8 @@
                     const date = new Date(selectedDate);
                     const formattedDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()} ${selectedTime}`;
                     datetimeInput.value = formattedDate;
+                    datetimeInput.classList.remove('error');
+                    errorMessages.datetime.style.display = 'none';
                     calendarModal.style.display = 'none';
                 } else {
                     alert('Пожалуйста, выберите дату и время');
@@ -997,50 +1117,79 @@
                 selectedDateInfo.textContent = '';
             }
             
+            // Валидация полей
+            function validateField(fieldId, errorId, condition) {
+                const field = document.getElementById(fieldId);
+                const error = errorMessages[errorId];
+                
+                if (condition) {
+                    field.classList.add('error');
+                    error.style.display = 'block';
+                    return false;
+                } else {
+                    field.classList.remove('error');
+                    error.style.display = 'none';
+                    return true;
+                }
+            }
+            
+            // Прокрутка к первому полю с ошибкой
+            function scrollToFirstError() {
+                for (const [key, errorElement] of Object.entries(errorMessages)) {
+                    if (errorElement.style.display === 'block') {
+                        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        break;
+                    }
+                }
+            }
+            
             // Обработчик кнопки "Далее"
             nextButton.addEventListener('click', function() {
                 const datetime = datetimeInput.value;
                 const title = document.getElementById('order-title').value;
                 const description = document.getElementById('order-description').value;
                 const address = document.getElementById('order-address').value;
-                const instructions = document.getElementById('address-instructions').value;
                 
                 // Сбор контактов
                 const contacts = [];
                 const contactContainers = document.querySelectorAll('.contact-container');
+                let hasValidContact = false;
+                
                 contactContainers.forEach(container => {
                     const inputs = container.querySelectorAll('.contact-input');
-                    if (inputs[0].value && inputs[1].value) {
+                    const name = inputs[0].value;
+                    const phone = inputs[1].value;
+                    
+                    // Проверяем, заполнены ли оба поля контакта
+                    if (name && phone) {
                         contacts.push({
-                            name: inputs[0].value,
-                            phone: inputs[1].value
+                            name: name,
+                            phone: phone
                         });
+                        hasValidContact = true;
+                        inputs[0].classList.remove('error');
+                        inputs[1].classList.remove('error');
+                    } else if (name || phone) {
+                        // Если заполнено только одно поле
+                        if (!name) inputs[0].classList.add('error');
+                        if (!phone) inputs[1].classList.add('error');
                     }
                 });
                 
-                // Валидация
+                // Валидация полей по очереди
                 let isValid = true;
-                let errorMessage = '';
                 
-                if (!selectedWorkerType) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, выберите тип рабочего';
-                } else if (!datetime) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, укажите дату и время выполнения заказа';
-                } else if (!title || !description) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, заполните описание заказа';
-                } else if (!address) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, укажите адрес оказания услуг';
-                } else if (contacts.length === 0) {
-                    isValid = false;
-                    errorMessage = 'Пожалуйста, укажите хотя бы один контакт для связи';
-                }
+                if (!validateField('worker-type-section', 'workerType', !selectedWorkerType)) isValid = false;
+                if (isValid && !validateField('order-datetime', 'datetime', !datetime)) isValid = false;
+                if (isValid && !validateField('workers-count', 'workers', workersCount < 1)) isValid = false;
+                if (isValid && !validateField('hours-count', 'hours', hoursCount < 1)) isValid = false;
+                if (isValid && !validateField('order-title', 'title', !title)) isValid = false;
+                if (isValid && !validateField('order-description', 'description', !description)) isValid = false;
+                if (isValid && !validateField('order-address', 'address', !address)) isValid = false;
+                if (isValid && !validateField('contacts-container', 'contacts', !hasValidContact)) isValid = false;
                 
                 if (!isValid) {
-                    tg.showAlert(errorMessage);
+                    scrollToFirstError();
                     return;
                 }
                 
@@ -1053,7 +1202,7 @@
                     title: title,
                     description: description,
                     address: address,
-                    instructions: instructions,
+                    instructions: document.getElementById('address-instructions').value,
                     contacts: contacts,
                     userId: userId,
                     rate: 900, // Ставка 900 рублей в час
